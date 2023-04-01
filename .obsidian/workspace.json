@@ -1,0 +1,158 @@
+{
+  "main": {
+    "id": "2d200dfc48160101",
+    "type": "split",
+    "children": [
+      {
+        "id": "21318dea945c60e2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "77041b0f145cb49d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "readme.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f1a48ce88591a886",
+    "type": "split",
+    "children": [
+      {
+        "id": "446b2a940e70a613",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d01d81c134470f92",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "165a3ab52f2358a0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "7d08cd035c6515d1",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "651d20526e0596c9",
+    "type": "split",
+    "children": [
+      {
+        "id": "cc25bab88faf6e46",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "eadec7b1de0b8ad2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "readme.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "0e86cb724f259f47",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "readme.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "7f3a2c9f4f9a3f68",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "1ce462ea82cff6fd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "readme.md"
+              }
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "77041b0f145cb49d",
+  "lastOpenFiles": [
+    "readme.md",
+    "learning/机器学习/自学算法/代码实现算法 1.md",
+    "learning/机器学习/自学算法/代码实现算法.md",
+    "learning/机器学习/自学算法",
+    "learning/机器学习",
+    "learning"
+  ]
+}
