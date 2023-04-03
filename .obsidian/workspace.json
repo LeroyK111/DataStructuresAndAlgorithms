@@ -69,7 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -134,7 +134,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -148,6 +148,7 @@
   },
   "active": "77041b0f145cb49d",
   "lastOpenFiles": [
+    "readme.assets/Pasted image 20230402222829.png",
     "readme.md",
     "learning/机器学习/自学算法/代码实现算法 1.md",
     "learning/机器学习/自学算法/代码实现算法.md",
