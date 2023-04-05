@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -148,6 +149,13 @@
   },
   "active": "77041b0f145cb49d",
   "lastOpenFiles": [
+    "变位词.py.95d9caa963f39c242969cf8e63d01002.tmp",
+    "变位词.py",
+    "readme.assets/Pasted image 20230405201831.png",
+    "readme.assets/Pasted image 20230405201717.png",
+    "readme.assets/Pasted image 20230405195304.png",
+    "readme.assets/Pasted image 20230405195228.png",
+    "readme.assets/Pasted image 20230405195035.png",
     "readme.assets/Pasted image 20230402222829.png",
     "readme.md",
     "learning/机器学习/自学算法/代码实现算法 1.md",
