@@ -69,8 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -149,8 +148,18 @@
   },
   "active": "77041b0f145cb49d",
   "lastOpenFiles": [
-    "变位词.py.95d9caa963f39c242969cf8e63d01002.tmp",
-    "变位词.py",
+    "打印任务.py.656323fbb04b72246f739ce802829354.tmp",
+    "打印任务.py",
+    "热土豆问题.py.c2b2130d521dffcf64cf8693c087c6f7.tmp",
+    "热土豆问题.py",
+    "后缀表达式.py",
+    "中缀表单转换.py",
+    "表达式转换.py.10a3dd23945ed73620d9a91cd324cbfe.tmp",
+    "表达式转换.py",
+    "十进制转二进制.py",
+    "括号匹配.py",
+    "栈.py.05bd024452d1030a650e81ebe0430789.tmp",
+    "readme.assets/Pasted image 20230409105545.png",
     "readme.assets/Pasted image 20230405201831.png",
     "readme.assets/Pasted image 20230405201717.png",
     "readme.assets/Pasted image 20230405195304.png",
@@ -159,9 +168,6 @@
     "readme.assets/Pasted image 20230402222829.png",
     "readme.md",
     "learning/机器学习/自学算法/代码实现算法 1.md",
-    "learning/机器学习/自学算法/代码实现算法.md",
-    "learning/机器学习/自学算法",
-    "learning/机器学习",
-    "learning"
+    "learning/机器学习/自学算法/代码实现算法.md"
   ]
 }
