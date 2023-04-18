@@ -1,5 +1,6 @@
 {
   "useMarkdownLinks": true,
   "showInlineTitle": false,
-  "attachmentFolderPath": "readme.assets"
+  "attachmentFolderPath": "readme.assets",
+  "newLinkFormat": "relative"
 }

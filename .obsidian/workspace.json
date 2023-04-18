@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -148,17 +149,20 @@
   },
   "active": "77041b0f145cb49d",
   "lastOpenFiles": [
-    "双端队列.py.616b9d1ebdfd78e1adaa21dd59448454.tmp",
-    "双端队列.py",
-    "打印任务.py.656323fbb04b72246f739ce802829354.tmp",
-    "打印任务.py",
-    "热土豆问题.py.c2b2130d521dffcf64cf8693c087c6f7.tmp",
-    "热土豆问题.py",
-    "后缀表达式.py",
-    "中缀表单转换.py",
-    "表达式转换.py.10a3dd23945ed73620d9a91cd324cbfe.tmp",
-    "表达式转换.py",
-    "十进制转二进制.py",
+    "递归可视化.py.dff3df113cf2ad2bf11f8b313655b8df.tmp",
+    "递归可视化.py",
+    "递归深度限制.py",
+    "readme.assets/Pasted image 20230418145808.png",
+    "递归进制转换.py",
+    "递归任意进制转换.py",
+    "任意进制转换.py.3a153964acf5d32a7628609ed8fbdee2.tmp",
+    "未命名.md",
+    "readme.md",
+    "任意进制转换.py",
+    "数列求和.py.390807e36e92fe3a26bbb5d96c99e286.tmp",
+    "数列求和.py",
+    "链表实现有序表.py.d1cbab80cd3d4fef2da0a9025a57ea0c.tmp",
+    "链表实现无序表.py.a310554834332ffa69170d3f1a9ae8b6.tmp",
     "readme.assets/Pasted image 20230409105545.png",
     "readme.assets/Pasted image 20230405201831.png",
     "readme.assets/Pasted image 20230405201717.png",
@@ -166,7 +170,6 @@
     "readme.assets/Pasted image 20230405195228.png",
     "readme.assets/Pasted image 20230405195035.png",
     "readme.assets/Pasted image 20230402222829.png",
-    "readme.md",
     "learning/机器学习/自学算法/代码实现算法 1.md",
     "learning/机器学习/自学算法/代码实现算法.md"
   ]

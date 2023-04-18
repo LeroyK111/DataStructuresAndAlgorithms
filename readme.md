@@ -120,19 +120,547 @@ a.insert(0, 1)
 # 移除
 a.pop(index)
 ```
+
 #### 采用链表实现无序表。
 采用链接节点Node的方式构建数据，需要构建对象传递。
+单链表： 每个节点都要维护一个指向next node address
+双链表： 每个节点都要维护两个指向previous node address
 
 ```python
+class NodeList:
+
+    def __init__(self, item=None) -> None:
+
+        self.head = None
+
+        self.item = item
+
+  
+
+    def add(self, item):
+
+        # 创建下一个节点
+
+        temp = NodeList(item)
+
+        # 把当前节点head赋值给下一个节点的head
+
+        temp.setNext(self.head)
+
+        # 当前节点head则指向下一个节点的位置
+
+        self.head = temp
+
+  
+
+    def setValue(self, item):
+
+        # 修改当前node的值
+
+        self.item = item
+
+  
+
+    def getValue(self):
+
+        # 获取当前node的值
+
+        return self.item
+
+  
+
+    def getNext(self):
+
+        # 获取下一个node
+
+        return self.head
+
+  
+
+    def setNext(self, head):
+
+        self.head = head
+
+  
+
+    def size(self):
+
+        count = 0
+
+        nextNode = self.head
+
+        while nextNode is not None:
+
+            nextNode = nextNode.getNext()
+
+            count += 1
+
+        return count
+
+  
+
+    def search(self, item):
+
+        nextNode = self.head
+
+        while nextNode is not None:
+
+            if nextNode.getValue() == item:
+
+                return True
+
+            nextNode = nextNode.getNext()
+
+        return False
+
+  
+
+    def remove(self, item):
+
+        current = self.head
+
+        prevNode = None
+
+        found = False
+
+  
+
+        """
+
+        快慢指针
+
+        """
+
+        while not found:
+
+            if current.getValue() == item:
+
+                # 判断下一个指针的内容
+
+                found = True
+
+            else:
+
+                prevNode = current
+
+                current = current.getNext()
+
+  
+
+        if prevNode is None:
+
+            self.head = current.getNext()
+
+        else:
+
+            prevNode.setNext(current.getNext())
+
+  
+  
+  
+
+if __name__ == "__main__":
+
+    # 直接生成链表对象
+
+    Demo = NodeList()
+
+  
+
+    Demo.add(2)
+
+    Demo.add(3)
+
+    Demo.add(4)
+
+    # two = Demo.getNext()
+
+  
+
+    # print(two.__dict__)
+
+    print("链表大小", Demo.size())
+
+    Demo.remove(3)
+
+    # print(Demo.search(3))
+
+    print("链表大小", Demo.size())
+
+    for i in range(Demo.size()):
+
+        Demo = Demo.getNext()
+
+        result = Demo.getValue()
+
+        print(result)
 
 
+```
+#### 链表实现有序表
+修改的只有add，search
+add 增加遍历，提高了复杂度
+search 让遍历难度降低了。
+```python
+class OrderedNodeList:
+
+    def __init__(self, item=None) -> None:
+
+        self.head = None
+
+        self.item = item
+
+  
+
+    def add(self, item):
+
+        # ! 和无序表最大的区别，插入到某个节点之前，还要维护索引head，
+
+        current = self.head
+
+        prevous = None
+
+        stop = False
+
+        while current is not None and not stop:
+
+            # 这里循序必须在第一个head赋值之前，
+
+            if current.getValue() > item:
+
+                stop = True
+
+            else:
+
+                prevous = current
+
+                current = current.getNext()
+
+  
+
+        temp = OrderedNodeList(item)
+
+        if prevous is None:
+
+            temp.setNext(self.head)
+
+            self.head = temp
+
+        else:
+
+            # 当前node设置head
+
+            temp.setNext(current)
+
+            # 前一个node设置head
+
+            prevous.setNext(temp)
+
+  
+
+    def setValue(self, item):
+
+        # 修改当前node的值
+
+        self.item = item
+
+  
+
+    def getValue(self):
+
+        # 获取当前node的值
+
+        return self.item
+
+  
+
+    def getNext(self):
+
+        # 获取下一个node
+
+        return self.head
+
+  
+
+    def setNext(self, head):
+
+        self.head = head
+
+  
+
+    def size(self):
+
+        count = 0
+
+        nextNode = self.head
+
+        while nextNode is not None:
+
+            nextNode = nextNode.getNext()
+
+            count += 1
+
+        return count
+
+  
+
+    def search(self, item):
+
+        # 有序表的查找，则可以依靠大小来判定，节省搜索时间
+
+        current = self.head
+
+        found = False
+
+        stop = False
+
+  
+
+        while current is not None and not found and not stop:
+
+            if current.getValue() == item:
+
+                # 当前值判断
+
+                found = True
+
+            else:
+
+                if current.getValue() > item:
+
+                    # 如果当前值已经大于item，则之后的node也是大于item的，有序链表从小到大
+
+                    stop = True
+
+                else:
+
+                    current = current.getNext()
+
+  
+
+        return found
+
+  
+
+    def remove(self, item):
+
+        current = self.head
+
+        prevNode = None
+
+        found = False
+
+  
+
+        """
+
+        快慢指针: 思维误区，双指针才能实现地址的拼接, 但要排除第一个none
+
+        """
+
+        while not found:
+
+            if current.getValue() == item:
+
+                # 判断下一个指针的内容
+
+                found = True
+
+            else:
+
+                prevNode = current
+
+                current = current.getNext()
+
+  
+
+        if prevNode is None:
+
+            self.head = current.getNext()
+
+        else:
+
+            prevNode.setNext(current.getNext())
+
+  
+
+    def pop(self, index=-1):
+
+        # 移除并返回有序表中的指定位置
+
+        # 默认最后一项
+
+        index = self.size() - 1 if index == -1 else index
+
+        count = 0
+
+        current = self.head
+
+        found = False
+
+        while current is not None:
+
+            if count == index:
+
+                found = True
+
+                break
+
+            current = current.getNext()
+
+            count += 1
+
+  
+
+        if found:
+
+            res = current.getValue()
+
+            self.remove(current.getValue())
+
+            return res
+
+        else:
+
+            raise IndexError("Index not found")
+
+  
+
+    def isEmpty(self):
+
+        if self.size() == 0:
+
+            return False
+
+        return True
+```
+
+#### 小结
+线性数据结构 Linear DS 以某种 线性次序组织起来。
+栈 Stack 维持了数据项后进先出LIFO的次序。
+```
+stack: push, pop, isEmpty
+```
+
+队列Queue维持了数据项先进先出FIFO的次序
+```
+queue的基本操作包括enqueue，dequeue，isEmpty
+```
+
+书写表达式存在前缀prefix，中缀infix，后缀postfix三种。
+```
+由于栈结构具有次序反转的特性，所以栈结构适合用于开发表达式求值和转换算法。
+```
+
+“模拟系统”可以通过一个对现实世界问题的抽象建模，加入随机数，动态运行。为复杂问题的决策提供各种参考情况。
+```
+队列queue可以用来进行模拟系统的开发。
+```
+
+双端队列Deque可以同时具备栈和队列的功能
+```
+主要操作addfront，addrear，removefront，removerear，isEmpty
+```
+
+列表list是数据项能够保持相对位置的数据集
+链表的实现，可以保持列表中维持相对位置的特点，而不需要连续的存储空间。但是我们需要对head进行特殊的处理。
+```
+单链表：值+下一个地址
+双链表：上一个地址+值+下一个地址
+循环链表：首位地址相连
+```
+
+### 递归Recursion
+递归是一种解决问题的方法，精髓在于将问题分解为规模更小的**★相同问题**。
+
+可以持续分解，直到问题小到可以用简单直观的计算来解决。
+
+递归的问题分解方式非常独特，其算法方面的明显特征就是：在算法流程中调用自身。
+
+为我们提供了一种复杂问题的优雅解法，精妙的递归算法常会出奇的简单，令人惊叹。
+
+- 递归算法必须有一个基本结束条件。最小规模必须直接解决。
+- 递归算法必须能改变状态向基本结束条件演进。
+- 递归算法必须调用自身，解决规模减小了的相同问题。
+
+#### 数列求和
+```python
+def listnum(numlist):
+    print(numlist)
+    if len(numlist) == 1:
+        # 最小规模
+        return numlist[0]
+    else:
+        # 减少规模
+        return numlist[0] + listnum(numlist[1:])
+print(listnum([1, 2, 3, 4, 5]))
+```
+
+#### 进制转换
+```python
+def toStr(n, base):
+
+    convertString = "0123456789ABCDEF"
+
+    if n < base:
+
+        # 最小规模
+
+        return convertString[n]
+
+    else:
+
+        # 减小规模，调用自身，反向读写数据
+
+        return toStr(n // base, base) + convertString[n % base]
+
+  
+  
+
+print(toStr(1453, 16))
+```
+
+#### 递归调用为什么类似栈的读写思路?
+
+当一个函数被调用时，系统会把调用时的现场数据压入系统调用栈。
+每次调用，压入栈的现场数据称为栈帧。当函数返回时，要从栈顶取得返回地址，恢复现场，弹出栈帧，按地址返回。
+
+![](readme.assets/Pasted%20image%2020230418145808.png)
+
+#### 递归深度限制deep
+```python
+def tell_store():
+	print("从前有座山。。。")
+	tell_store()
+```
+默认递归深度1000，通过递归调用栈计算
+```python
+import sys
+print(sys.getrecursionlimit())
+
+# 设置递归深度
+sys.setrecursionlimit(3000)
+```
+
+#### 递归可视化
+使用一个turtle module内置模块，可视化展现递归。
+会打开一个gui然后我们自己画图
+```
+import turtle
+t = turtle.Turtle()
+# 开始作图
+t.forward(100)
+
+# 结束绘图
+turtle.done()
+```
+画个正方形
+```python
 
 ```
 
 
 
-
-### 递归
 
 
 
