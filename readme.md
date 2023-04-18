@@ -747,6 +747,108 @@ turtle.done()
 分形构造，平面称谢尔宾斯基三角形，立体称谢尔宾斯基金字塔。
 实际上真正的谢尔宾斯基三角形是完全不可见的，其面积为0，但周长无穷，介于一维和二维之间的分数堆（约1.585维）构造。
 
+```python
+def getMid(p1, p2):
+
+return ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)
+
+  
+  
+
+def drawTriangle(points, color):
+
+t.fillcolor(color)
+
+t.penup()
+
+t.goto(points["top"])
+
+t.pendown()
+
+t.goto(points["left"])
+
+t.goto(points["right"])
+
+t.goto(points["top"])
+
+t.end_fill()
+
+  
+  
+
+def sierpinski(n, points):
+
+colormap = ["blue", "red", "green", "yellow", "blue", "orange"]
+
+drawTriangle(points, colormap[n])
+
+if n > 0:
+
+sierpinski(n - 1, {"left": points["left"], "top": getMid(points["left"], points["top"]), "right": getMid(points["left"], points["right"])})
+
+  
+
+sierpinski(n - 1, {"left": getMid(points["left"], points["top"]), "top": points["top"], "right": getMid(points["top"], points["right"])})
+
+  
+
+sierpinski(n - 1, {"left": getMid(points["left"], points["right"]), "top": getMid(points["top"], points["right"]), "right": points["right"]})
+
+  
+  
+
+points = {"top": (-200, -100), "left": (0, 200), "right": (200, -100)}
+
+sierpinski(5, points)
+
+turtle.done()
+```
+
+
+##### 汉诺塔
+```python
+count = []
+
+  
+  
+
+def moveDisk(disk, fromPole, toPole):
+
+count.append(disk)
+
+print(f"moving disk[{disk}] from {fromPole} to {toPole}")
+
+  
+  
+
+def moveTower(height, fromPole, withPole, toPole):
+
+if height >= 1:
+
+moveTower(height - 1, fromPole, toPole, withPole)
+
+moveDisk(height, fromPole, toPole)
+
+moveTower(height - 1, withPole, fromPole, toPole)
+
+  
+  
+
+if __name__ == "__main__":
+
+moveTower(5, "#1", "#2", "#3")
+
+print(len(count))
+```
+
+##### 探索迷宫
+
+```python
+
+```
+
+
+
 
 
 
