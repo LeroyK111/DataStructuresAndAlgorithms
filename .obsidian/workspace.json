@@ -144,11 +144,16 @@
       "canvas:新建白板": false,
       "daily-notes:打开/创建今天的日记": false,
       "templates:插入模板": false,
-      "command-palette:打开命令面板": false
+      "command-palette:打开命令面板": false,
+      "obsidian-excalidraw-plugin:新建 Excalidraw 绘图": false
     }
   },
   "active": "77041b0f145cb49d",
   "lastOpenFiles": [
+    "readme.assets/Pasted image 20230418204857.png",
+    "分形树.py.ea9a504b8507733e8205adab6d558d3c.tmp",
+    "分形树.py",
+    "递归可视化.py.a12978c155fdfbe0a73af9e8d3e74fff.tmp",
     "递归可视化.py.dff3df113cf2ad2bf11f8b313655b8df.tmp",
     "递归可视化.py",
     "递归深度限制.py",
@@ -159,10 +164,6 @@
     "未命名.md",
     "readme.md",
     "任意进制转换.py",
-    "数列求和.py.390807e36e92fe3a26bbb5d96c99e286.tmp",
-    "数列求和.py",
-    "链表实现有序表.py.d1cbab80cd3d4fef2da0a9025a57ea0c.tmp",
-    "链表实现无序表.py.a310554834332ffa69170d3f1a9ae8b6.tmp",
     "readme.assets/Pasted image 20230409105545.png",
     "readme.assets/Pasted image 20230405201831.png",
     "readme.assets/Pasted image 20230405201717.png",

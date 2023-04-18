@@ -656,8 +656,107 @@ turtle.done()
 ```
 画个正方形
 ```python
+for i in range(4):
 
+t.forward(100)
+
+t.right(90)
 ```
+画个五角星
+```python
+# !五角星
+
+t.pencolor("red")
+
+t.pensize("3")
+
+for i in range(5):
+
+t.forward(100)
+
+t.right(144)
+
+# 隐藏箭头图标
+
+t.hideturtle()
+```
+递归螺旋
+```python
+def drawSpiral(t, linelen):
+
+if linelen > 0:
+
+# 最小规模
+t.forward(linelen)
+t.right(90)
+
+# 递减
+drawSpiral(t, linelen - 5)
+drawSpiral(t, 100)
+```
+##### 分形树
+自然界中出现的分形特性，使得计算机可以通过分形算法，生成非常逼真的自然场景。
+分形就是在不同尺度上都具有相似性的事物。
+
+```python
+def tree(branch_len):
+
+if branch_len >= 5:
+
+t.forward(branch_len)
+
+t.right(20)
+
+tree(branch_len - 15)
+
+t.left(40)
+
+tree(branch_len - 15)
+
+t.right(20)
+
+t.backward(branch_len)
+
+  
+  
+
+t = turtle.Turtle()
+
+t.left(90)
+
+t.penup()
+
+t.backward(100)
+
+t.pendown()
+
+t.pencolor("green")
+
+t.pensize(2)
+
+tree(70)
+
+t.hideturtle()
+
+turtle.done()
+```
+
+![](readme.assets/Pasted%20image%2020230418204857.png)
+
+##### 谢尔宾斯基sierpinski三角形
+分形构造，平面称谢尔宾斯基三角形，立体称谢尔宾斯基金字塔。
+实际上真正的谢尔宾斯基三角形是完全不可见的，其面积为0，但周长无穷，介于一维和二维之间的分数堆（约1.585维）构造。
+
+
+
+
+
+
+
+
+
+
+
 
 
 
