@@ -32,21 +32,44 @@ class Maze:
     def test(self):
         print(len(self.mazelist[0]))
         print(self.startRow, self.startCol)
+
+
+    def plot(self, t):
+        """
+        假如每个*的面积都是1*1，则行高单位为1，列宽单位为1。
+        """
         
-    
-    
-    
-    
+        rowNumber = 0
+        for row in self.mazelist:
+            wallList = list(row)
+            rowNumber +=1
+            colNumber = 0
+            for wallBrick in wallList:
+                colNumber += 1
+                # 记的加块砖
+                
+                
+                
+                
+        t.done()        
+                
         
         
+
+
+    def run(self):
+        # 海龟画图
+        t = turtle.Turtle()
+        self.plot(t)
         
-    
-    
+        
+
+
 
 
 if __name__ == "__main__":
     demo = Maze("learning/机器学习/自学算法/DataStructuresAndAlgorithms/maze.txt")
-    demo.test()
-
-
-
+    demo.run()
+    
+    
+    
