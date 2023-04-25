@@ -33,36 +33,32 @@ class Maze:
         print(len(self.mazelist[0]))
         print(self.startRow, self.startCol)
 
-
-    def plot(self, t):
+    def plot(self):
         """
-        假如每个*的面积都是1*1，则行高单位为1，列宽单位为1。
+        假如每个*的面积都是10*10，则行高单位为10，列宽单位为10。
         """
-        
+        t = turtle.Turtle()
         rowNumber = 0
+        t.color("black", "orange")
+
         for row in self.mazelist:
             wallList = list(row)
-            rowNumber +=1
+            rowNumber += 1
             colNumber = 0
             for wallBrick in wallList:
+                print(wallBrick)
                 colNumber += 1
                 # 记的加块砖
-                
-                
-                
-                
-        t.done()        
-                
-        
-        
+                if wallBrick == "*":
+                    t.fd(100)
 
+                turtle.done()
 
     def run(self):
-        # 海龟画图
-        t = turtle.Turtle()
-        self.plot(t)
-        
-        
+        # 画迷宫
+        self.plot()
+        # 走迷宫
+
 
 
 
@@ -70,6 +66,3 @@ class Maze:
 if __name__ == "__main__":
     demo = Maze("learning/机器学习/自学算法/DataStructuresAndAlgorithms/maze.txt")
     demo.run()
-    
-    
-    
