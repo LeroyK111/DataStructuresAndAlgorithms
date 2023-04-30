@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -149,8 +150,8 @@
   },
   "active": "e69c44cbf7b4ae8b",
   "lastOpenFiles": [
-    "readme.md",
     "探索迷宫.py.50d5a9dc67104c2bb7dd0e124cb988fd.tmp",
+    "readme.md",
     "maze.txt",
     "mazelist.txt",
     "探索迷宫.py",
