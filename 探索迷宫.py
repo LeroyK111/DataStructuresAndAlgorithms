@@ -37,7 +37,8 @@ class Maze:
                 self.mazelist.append(rowList)
 
     def test(self):
-        print(len(self.mazelist[-1]))
+        print(len(self.mazelist[0]))
+        print(len(self.mazelist))
         print(self.mazelist)
         print(self.startRow, self.startCol)
 
@@ -79,14 +80,40 @@ class Maze:
                     t.right(90)
                     t.end_fill()
                     # 将墙砖坐标加入
-                    self.walltTile.append((float(penIndex[0] + 5), float(penIndex[1] - 5)))
+                    self.walltTile.append((penIndex[0] + 5, penIndex[1] - 5))
                 penIndex[0] += 10
                 t.pu()
                 t.goto(*penIndex)
                 t.pd()
             penIndex[1] -= 10
 
-    # def searchPath(self):
+    def searchPath(self, oldPosition=None, count=0):
+        # 获取当前位置
+        current = tuple(map(lambda x: round(x, 1), t.pos()))
+        # 记录一下老位置
+        oldPos = current
+
+        time.sleep(2)
+
+        # 判定当前位置出口, 是否在四个墙边，并且不属于墙内
+        if current[0] in [5, 255] and current[1] in [5, 85] and current not in self.walltTile:
+            print("找到出口")
+            return
+        else:
+            # 直接当前朝向前进
+            t.fd(10)
+            current = tuple(map(lambda x: round(x, 1), t.pos()))
+
+        if current in self.walltTile:
+            # 在墙内
+            t.bk(1)
+            t.rt(90)
+
+            count += 1
+        else:
+            count = 0
+
+        self.searchPath(oldPos, count)
 
     def run(self):
         # 画迷宫地图
@@ -98,17 +125,9 @@ class Maze:
         t.fillcolor("red")
         t.home()
         t.goto(self.startCol * 10 + 5, self.startRow * -10 - 5)
-        # 测试在不在墙里
-        t.fd(10)
-        # 开始计算路径
-        defaultIndex = t.pos()
 
-        # 调用递归
-        # self.searchPath(defaultIndex)
-
-        for wall in self.walltTile:
-            if wall[0] == defaultIndex[0] and wall[1] == defaultIndex[1]:
-                print("really in here")
+        # 计算路径
+        self.searchPath()
 
         t.exitonclick()
 

@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "b97e87818cecfa45",
+        "id": "f9ed770be774d87b",
         "type": "tabs",
         "children": [
           {
-            "id": "e69c44cbf7b4ae8b",
+            "id": "e8961c12cf8607ec",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -148,7 +148,7 @@
       "obsidian-excalidraw-plugin:新建 Excalidraw 绘图": false
     }
   },
-  "active": "e69c44cbf7b4ae8b",
+  "active": "e8961c12cf8607ec",
   "lastOpenFiles": [
     "探索迷宫.py.50d5a9dc67104c2bb7dd0e124cb988fd.tmp",
     "readme.md",
