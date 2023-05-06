@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import time
 import turtle as t
 import random
 
@@ -87,33 +86,30 @@ class Maze:
                 t.pd()
             penIndex[1] -= 10
 
-    def searchPath(self, oldPosition=None, count=0):
-        # 获取当前位置
-        current = tuple(map(lambda x: round(x, 1), t.pos()))
-        # 记录一下老位置
-        oldPos = current
+    def searchPath(self, oldHead=0):
+        # 获取当前朝向
+        currentHead = t.heading()
 
-        time.sleep(2)
+        # 直接在当前朝向上前进一步
+        t.fd(10)
+
+        # 获取当前位置
+        currentPosition = tuple(map(lambda x: round(x, 1), t.pos()))
+
+        # 判断是不是在墙内
+        if currentPosition in self.walltTile:
+            t.bk()
+            self.searchPath(
+                oldHead=currentHead,
+            )
 
         # 判定当前位置出口, 是否在四个墙边，并且不属于墙内
-        if current[0] in [5, 255] and current[1] in [5, 85] and current not in self.walltTile:
-            print("找到出口")
-            return
+        if currentPosition[0] in [5, 255] and currentPosition[1] in [-5, -85] and currentPosition not in self.walltTile:
+            return "找到出口"
         else:
-            # 直接当前朝向前进
-            t.fd(10)
-            current = tuple(map(lambda x: round(x, 1), t.pos()))
-
-        if current in self.walltTile:
-            # 在墙内
-            t.bk(1)
-            t.rt(90)
-
-            count += 1
-        else:
-            count = 0
-
-        self.searchPath(oldPos, count)
+            t.bk()
+            t.right(90)
+            self.searchPath()
 
     def run(self):
         # 画迷宫地图
@@ -122,6 +118,7 @@ class Maze:
         # 回到初始位置
         t.st()
         t.pu()
+
         t.fillcolor("red")
         t.home()
         t.goto(self.startCol * 10 + 5, self.startRow * -10 - 5)
