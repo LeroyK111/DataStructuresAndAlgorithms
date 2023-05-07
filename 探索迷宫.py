@@ -99,9 +99,7 @@ class Maze:
         # 判断是不是在墙内
         if currentPosition in self.walltTile:
             t.bk()
-            self.searchPath(
-                oldHead=currentHead,
-            )
+            self.searchPath(oldHead=currentHead)
 
         # 判定当前位置出口, 是否在四个墙边，并且不属于墙内
         if currentPosition[0] in [5, 255] and currentPosition[1] in [-5, -85] and currentPosition not in self.walltTile:
