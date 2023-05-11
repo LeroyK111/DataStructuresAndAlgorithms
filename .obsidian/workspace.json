@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "39f09f4b9fc80d37",
+            "id": "aeb0e0e63f462535",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -156,7 +156,7 @@
       "obsidian-excalidraw-plugin:新建 Excalidraw 绘图": false
     }
   },
-  "active": "39f09f4b9fc80d37",
+  "active": "aeb0e0e63f462535",
   "lastOpenFiles": [
     "readme.md",
     "探索迷宫.py.50d5a9dc67104c2bb7dd0e124cb988fd.tmp",
