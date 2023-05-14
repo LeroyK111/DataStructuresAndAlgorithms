@@ -135,7 +135,7 @@ class Maze:
                 self.searchPath()
                 
     def outletMarker(self): 
-        # ?绘制迷宫路径图
+        # ?绘制迷宫路径图, 还可以继续优化，消除冗余路径。
         for index in self.passing:
             t.goto(*index)
             t.stamp()
