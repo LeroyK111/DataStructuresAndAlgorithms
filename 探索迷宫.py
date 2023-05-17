@@ -160,7 +160,6 @@ class Maze:
         # 记录起始点的位置
         self.passing.append(t.pos())
         
-        # 计算路径
         self.searchPath()
 
         t.exitonclick()
@@ -169,5 +168,11 @@ class Maze:
 
 if __name__ == "__main__":
     demo = Maze("learning/机器学习/自学算法/DataStructuresAndAlgorithms/maze.txt")
+    
+ 
     demo.run()
+
+    
     # demo.test()
+    
+    
