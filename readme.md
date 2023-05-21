@@ -1162,24 +1162,813 @@ demo.run()
 # demo.test()
 ```
 #####  分治策略
-
+将大问题拆解成多个小问题，多个小问题的的解法类同。适合递归的三定律。
+![](readme.assets/Pasted%20image%2020230521161546.png)
+![](readme.assets/Pasted%20image%2020230521161631.png)
 
 ```python
+  
 
+def mergeSort(arr):
+
+import math
+
+if (len(arr) < 2):
+
+return arr
+
+# 向下取整
+
+middle = math.floor(len(arr) / 2)
+
+# 列表切割
+
+left, right = arr[0:middle], arr[middle:]
+
+# 调用下一个方法
+
+return merge(mergeSort(left), mergeSort(right))
+
+  
+  
+
+def merge(left, right):
+
+result = []
+
+# 当两组列表都存在时
+
+while left and right:
+
+# 各自判断个列表首个元素的大小
+
+if left[0] <= right[0]:
+
+# left弹出这个元素，
+
+result.append(left.pop(0))
+
+else:
+
+# right弹出这个元素
+
+result.append(right.pop(0))
+
+while left:
+
+result.append(left.pop(0))
+
+while right:
+
+result.append(right.pop(0))
+
+return result
+
+  
+  
+
+if __name__ == '__main__':
+
+arr = mergeSort(arr=[3, 2, 7, 1])
+
+print(arr)
+```
+
+#####  优化问题和贪心策略
+
+![](readme.assets/Pasted%20image%2020230521162057.png)
+经典问题找零。
+![](readme.assets/Pasted%20image%2020230521162159.png)
+Greedy Method
+![](readme.assets/Pasted%20image%2020230521162436.png)
+贪心策略失效的情况。
+![](readme.assets/Pasted%20image%2020230521162745.png)
+![](readme.assets/Pasted%20image%2020230521162803.png)
+```python
+
+def recMC(coinVaueList, change):
+
+minCoins = change
+
+if change in coinVaueList:
+
+return 1
+
+else:
+
+for i in [c for c in coinVaueList if c <= change]:
+
+print(i)
+
+numCooins = 1 + recMC(coinVaueList, change - i)
+
+if numCooins < minCoins:
+
+minCoins = numCooins
+
+return minCoins
+
+  
+  
+
+print(recMC([1, 5, 10, 25], 63))
+
+```
+贪心算法优化
+![](readme.assets/Pasted%20image%2020230521174409.png)
+```python
+def recDC(coinVaueList, change, knownResults):
+
+minCoins = change
+
+if change in coinVaueList:
+
+# 递归最优解，记录
+
+knownResults[change] = 1
+
+return 1
+
+elif knownResults[change] > 0:
+
+return knownResults[change]
+
+else:
+
+for i in [c for c in coinVaueList if c <= change]:
+
+numCoins = 1 + recDC(coinVaueList, change - i, knownResults)
+
+if numCoins < minCoins:
+
+minCoins = numCoins
+
+knownResults[change] = minCoins
+
+  
+
+return minCoins
+```
+
+##### 动态规划
+每一步都和前一步的结果有关。
+```python
+  
+
+def dpMakeChange(coinValueList, change, minCoins, coinsUsed):
+
+# 从1分开始到change，逐个计算最少的硬币数
+
+for cents in range(1, change + 1):
+
+# 初始化一个最大值
+
+coinCount = cents
+
+newCoin = 1
+
+# 减去每个硬币，向后查最少硬币数，同时记录总的最少数
+
+for j in [c for c in coinValueList if c <= cents]:
+
+if minCoins[cents - j] + 1 < coinCount:
+
+coinCount = minCoins[cents - j] + 1
+
+newCoin = j
+
+# 得到最少的硬币数，记录到表中
+
+minCoins[cents] = coinCount
+
+# 记录本步骤加的一个硬币
+
+coinsUsed[cents] = newCoin
+
+  
+
+# 返回最后一个结果
+
+return minCoins[change]
+
+  
+  
+
+def printCoins(coinsUsed, change):
+
+coin = change
+
+while coin > 0:
+
+thisCoin = coinsUsed[coin]
+
+print(thisCoin)
+
+coin = coin - thisCoin
+
+  
+  
+
+if __name__ == "__main__":
+
+amnt = 63
+
+clist = [1, 5, 10, 21, 25]
+
+coinsUsed = [0] * (amnt + 1)
+
+coinCount = [0] * (amnt + 1)
+
+dpMakeChange(clist, amnt, coinCount, coinsUsed)
+
+printCoins(coinsUsed, amnt)
+
+# print(coinsUsed)
+```
+
+博物馆大盗问题。
+![](readme.assets/Pasted%20image%2020230521183325.png)
+![](readme.assets/Pasted%20image%2020230521183308.png)
+
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+
+# 博物馆宝物价值
+
+tr = [None, {"w": 2, "v": 3}, {"w": 3, "v": 4}, {"w": 4, "v": 8}, {"w": 5, "v": 8}, {"w": 9, "v": 10}]
+
+  
+  
+
+# 大盗最大承重20
+
+max_w = 20
+
+  
+
+# 初始化二维表格m[(i, w)]
+
+# 表示前i个宝物中，最大重量w的组合，所得到的最大价值
+
+# 当i什么都不取，或w上线为0，则价值为0
+
+m = {(i, w): 0 for i in range(len(tr)) for w in range(max_w + 1)}
+
+  
+
+# print(m)
+
+  
+
+# 逐个填写二维表格
+
+for i in range(1, len(tr)):
+
+for w in range(1, max_w + 1):
+
+# !遍历全部表格
+
+if tr[i]["w"] > w:
+
+# 如果装不下第i个宝物，那就不装
+
+m[(i, w)] = m[(i - 1, w)]
+
+else:
+
+m[(i, w)] = max(m[(i - 1, w)], m[(i - 1, w - tr[i]["w"])] + tr[i]["w"])
+
+  
+  
+
+if __name__ == "__main__":
+
+result = m[(len(tr) - 1, max_w)]
+
+print(result)
+```
+#### 小结
+**递归算法和动态规划，其实可以相互转换的。**
+![](readme.assets/Pasted%20image%2020230521201308.png)
+
+### 排序查找算法
+
+#### 顺序查找算法 sequential search
+线性阶O(n)，算法。
+```python
+def sequentialSearch(alist, item):
+
+pos = 0
+
+found = False
+
+  
+
+while pos < len(alist) and not found:
+
+if alist[pos] == item:
+
+found = True
+
+  
+
+else:
+
+pos += 1
+
+  
+
+return found
+
+  
+  
+
+if __name__ == "__main__":
+
+testList = [1, 2, 32, 8]
+
+print(sequentialSearch(testList, 32))
+```
+
+#### 二分查找算法binarySearch
+只能针对有序表。无序表还需要考虑排序的开销。
+对数阶O(log n)，算法。
+```python
+
+def binarySearch(alist, item):
+
+first = 0
+
+last = len(alist) - 1
+
+found = False
+
+  
+
+while first <= last and not found:
+
+midPoint = (first + last) // 2
+
+if alist[midPoint] == item:
+
+found = True
+
+else:
+
+if item < alist[midPoint]:
+
+last = midPoint - 1
+
+else:
+
+first = midPoint + 1
+
+  
+
+return found
+
+  
+  
+
+if __name__ == "__main__":
+
+testlist = [1, 2, 3, 5]
+
+print(binarySearch(testlist, 2))
+```
+
+#### 冒泡排序Bubble Sort
+平方阶O(n^2)，算法。
+```python
+
+def bubbleSort(alist):
+
+exchanges = True
+
+  
+
+for passnum in range(len(alist) - 1, 0, -1):
+
+for i in range(passnum):
+
+if alist[i] > alist[i + 1]:
+
+alist[i], alist[i + 1] = alist[i + 1], alist[i]
+
+  
+  
+
+def shortBubbleSort(alist):
+
+exchanges = True
+
+passnum = len(alist) - 1
+
+while passnum > 0 and exchanges:
+
+exchanges = False
+
+for i in range(passnum):
+
+if alist[i] > alist[i + 1]:
+
+exchanges = True
+
+alist[i], alist[i + 1] = alist[i + 1], alist[i]
+
+  
+
+passnum = passnum - 1
+
+  
+  
+
+if __name__ == "__main__":
+
+alist = [54, 26, 25, 17, 56, 78]
+
+# bubbleSort(alist)
+
+shortBubbleSort(alist)
+
+print(alist)
 ```
 
 
+#### 选择排序 selection sort
+索引交换，比冒泡稍好一些。 
+平方阶O(n^2)，算法。
+```python
+  
+
+def selectionSort(alist):
+
+for fillslot in range(len(alist) - 1, 0, -1):
+
+positionOfMax = 0
+
+for location in range(1, fillslot + 1):
+
+if alist[location] > alist[positionOfMax]:
+
+positionOfMax = location
+
+  
+
+temp = alist[fillslot]
+
+alist[fillslot] = alist[positionOfMax]
+
+alist[positionOfMax] = temp
+
+  
+  
+
+if __name__ == "__main__":
+
+alist = [2, 3, 14, 1, 51234, 5, 36, 45267, 12]
+
+selectionSort(alist)
+
+print(alist)
+```
+
+
+#### 插入排序 insertion sort
+平方阶O(n^2)，算法。
+```python
+def insertionSort(alist):
+
+for index in range(1, len(alist)):
+
+currentValue = alist[index]
+
+position = index
+
+  
+
+while position > 0 and alist[position - 1] > currentValue:
+
+alist[position] = alist[position - 1]
+
+position = position - 1
+
+  
+
+alist[position] = currentValue
+
+  
+  
+
+if __name__ == "__main__":
+
+alist = [2, 3, 14, 1, 51234, 5, 36, 45267, 12]
+
+insertionSort(alist)
+
+print(alist)
+```
+#### 谢尔排序 shell sort
+比插入排序要好一些。
+平方阶O(n)，算法。
+```python
+def shellSort(alist):
+
+subListCount = len(alist) // 2
+
+while subListCount > 0:
+
+for startPosition in range(subListCount):
+
+gapInsertionSort(alist, startPosition, subListCount)
+
+  
+
+subListCount = subListCount // 2
+
+  
+  
+
+def gapInsertionSort(alist, startPosition, subListCount):
+
+for i in range(startPosition + subListCount, len(alist), subListCount):
+
+currentValue = alist[i]
+
+position = i
+
+while position >= subListCount and alist[position - subListCount] > currentValue:
+
+alist[position] = alist[position - subListCount]
+
+position = position - subListCount
+
+  
+
+alist[position] = currentValue
+
+  
+  
+  
+
+if __name__ == '__main__':
+
+alist = [2, 3, 14, 1, 51234, 5, 36, 45267, 12]
+
+shellSort(alist)
+
+print(alist)
+```
+#### 归并排序 merge sort
+归并排序，递归。 用空间换时间。
+对数阶O(log n) 算法。
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+def mergeSort(alist):
+
+if len(alist) > 1:
+
+mid = len(alist) // 2
+
+leftHalf = alist[:mid]
+
+rightHalf = alist[mid:]
+
+  
+
+mergeSort(leftHalf)
+
+mergeSort(rightHalf)
+
+  
+
+i = j = k = 0
+
+  
+
+while i < len(leftHalf) and j < len(rightHalf):
+
+if leftHalf[i] < rightHalf[j]:
+
+alist[k] = leftHalf[i]
+
+i += 1
+
+else:
+
+alist[k] = rightHalf[j]
+
+j += 1
+
+  
+
+k += 1
+
+  
+
+while i < len(leftHalf):
+
+alist[k] = leftHalf[i]
+
+i += 1
+
+k += 1
+
+  
+
+while j < len(rightHalf):
+
+alist[k] = rightHalf[j]
+
+j += 1
+
+k += 1
+
+  
+  
+
+def merge_sort(lst):
+
+if len(lst) <= 1:
+
+return lst
+
+  
+
+middle = len(lst) // 2
+
+left = merge_sort(lst[:middle])
+
+right = merge_sort(lst[middle:])
+
+  
+
+merged = []
+
+while left and right:
+
+if left[0] <= right[0]:
+
+merged.append(left.pop(0))
+
+else:
+
+merged.append(right.pop(0))
+
+merged.extend(right if right else left)
+
+  
+
+return merged
+
+  
+  
+
+if __name__ == "__main__":
+
+alist = [2, 3, 1, 41, 24, 151, 2345, 3456, 234, 12345, 123, 32, 34]
+
+# mergeSort(alist)
+
+# print(alist)
+
+  
+
+print(merge_sort(alist))
+```
+#### 快速排序quick sort
+归并排序，递归。 用空间换时间。
+对数阶O(log n) 算法。
+
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+def quickSort(alist):
+
+quickSortHelper(alist, 0, len(alist) - 1)
+
+  
+  
+
+def partition(alist, first, last):
+
+# 选定中值
+
+pivotValue = alist[first]
+
+  
+
+# 左右标初值
+
+leftMark = first + 1
+
+rightMark = last
+
+  
+
+done = False
+
+  
+
+while not done:
+
+# 向右移动左标
+
+while leftMark <= rightMark and alist[leftMark] <= pivotValue:
+
+leftMark += 1
+
+  
+
+# 向左移动右标
+
+while alist[rightMark] >= pivotValue and rightMark >= leftMark:
+
+rightMark -= 1
+
+  
+
+# 两标相错，结束移动
+
+if rightMark < leftMark:
+
+done = True
+
+else:
+
+# 左右标的值交换
+
+alist[leftMark], alist[rightMark] = alist[rightMark], alist[leftMark]
+
+  
+
+# 中间值就位
+
+alist[first], alist[rightMark] = alist[rightMark], alist[first]
+
+  
+
+# 中间值点，分裂点
+
+return rightMark
+
+  
+  
+
+def quickSortHelper(alist, first, last):
+
+# 基本结束条件
+
+if first < last:
+
+# 分裂
+
+splitPoint = partition(alist, first, last)
+
+# 递归调用
+
+quickSortHelper(alist, first, splitPoint - 1)
+
+quickSortHelper(alist, splitPoint + 1, last)
+
+  
+  
+
+if __name__ == "__main__":
+
+alist = [54, 26, 25, 17, 56, 78]
+
+# bubbleSort(alist)
+
+quickSort(alist)
+
+print(alist)
+```
+
+### 散列Hashing
 
 
 
+### 树Tree
 
 
 
-
-
-
-
-
+### 图Graph
 
 
 
@@ -1204,21 +1993,133 @@ f(n)的函数，求导之后的就知道，对T的斜率影响最大的那个部
 -   平方阶O(n²)
 -   立方阶O(n³)
 -   K次方阶O(n^k)
--   指数阶(2^n) 上面从上至下依次的时间复杂度越来越大，执行的效率越来越低。
+-   指数阶O(2^n) 上面从上至下依次的时间复杂度越来越大，执行的效率越来越低。
+-   阶乘阶O(n!)
+#### 常数阶O(1)
+```python
+def constant(n: int) -> int:
+    """常数阶"""
+    count: int = 0
+    size: int = 100000
+    for _ in range(size):
+        count += 1
+    return count
 
+```
+#### 对数阶O(logN)
+```python
+def logarithmic(n: float) -> int:
+    """对数阶（循环实现）"""
+    count: int = 0
+    while n > 1:
+        n = n / 2
+        count += 1
+    return count
 
+```
 
+#### 线性阶O(n)
+```python
+def linear(n: int) -> int:
+    """线性阶"""
+    count: int = 0
+    for _ in range(n):
+        count += 1
+    return count
 
+```
 
+#### 线性对数阶O(n * logN)
+```python
+def linear_log_recur(n: float) -> int:
+    """线性对数阶"""
+    if n <= 1:
+        return 1
+    count: int = linear_log_recur(n // 2) + linear_log_recur(n // 2)
+    for _ in range(n):
+        count += 1
+    return count
+```
 
+#### 平方阶O(n²)
+```python
+def quadratic(n: int) -> int:
+    """平方阶"""
+    count: int = 0
+    # 循环次数与数组长度成平方关系
+    for i in range(n):
+        for j in range(n):
+            count += 1
+    return count
 
+```
+#### 立方阶O(n³)
+```python
+def quadratic(n: int) -> int:
+    """平方阶"""
+    count: int = 0
+    # 循环次数与数组长度成平方关系
+    for i in range(n):
+        for j in range(n):
+            for z in range(n):
+	            count += 1
+    return count
 
+```
 
+#### K次方阶O(n^k)
+```python
 
+k = 10Ï
 
+def demo(n: int = 10, c: int = 0, result: int = []) -> int:
 
+"""K次方阶(递归实现）"""
 
+if c == k:
 
+return
+
+for i in range(n):
+
+c += 1
+
+n -= 1
+
+result.append(i)
+
+demo(n, c, result)
+
+```
+
+#### 指数阶O(2^n)
+```python
+def exponential(n: int) -> int:
+    """指数阶（循环实现）"""
+    count: int = 0
+    base: int = 1
+    # cell 每轮一分为二，形成数列 1, 2, 4, 8, ..., 2^(n-1)
+    for _ in range(n):
+        for _ in range(base):
+            count += 1
+        base *= 2
+    # count = 1 + 2 + 4 + 8 + .. + 2^(n-1) = 2^n - 1
+    return count
+
+```
+
+#### 阶乘阶O(n!)
+```python
+def factorial_recur(n: int) -> int:
+    """阶乘阶（递归实现）"""
+    if n == 0:
+        return 1
+    count: int = 0
+    # 从 1 个分裂出 n 个
+    for _ in range(n):
+        count += factorial_recur(n - 1)
+    return count
+```
 
 
 ### 空间复杂度：
@@ -1229,10 +2130,67 @@ f(n)的函数，求导之后的就知道，对T的斜率影响最大的那个部
 -  平方阶O(n^2)
 -  指数阶O(2^n)
 
+#### 常数阶O(1)
+```python
+def constant(n: int) -> None:
+    """常数阶"""
+    # 常量、变量、对象占用 O(1) 空间
+    a: int = 0
+    nums: list[int] = [0] * 10000
+    node = ListNode(0)
+    # 循环中的变量占用 O(1) 空间
+    for _ in range(n):
+        c: int = 0
+    # 循环中的函数占用 O(1) 空间
+    for _ in range(n):
+        function()
 
+```
 
+#### 对数阶O(log n)
+```python
+def logarithmic(n: float) -> int:
+    """对数阶（循环实现）"""
+    count: int = 0
+    while n > 1:
+        n = n / 2
+        count += 1
+    return count
 
+```
 
+#### 线性阶O(n)
+```python
+def linear(n: int) -> None:
+    """线性阶"""
+    # 长度为 n 的列表占用 O(n) 空间
+    nums: list[int] = [0] * n
+    # 长度为 n 的哈希表占用 O(n) 空间
+    mapp = dict[int, str]()
+    for i in range(n):
+        mapp[i] = str(i)
 
+```
 
+#### 平方阶O(n^2)
 
+```python
+def quadratic(n: int) -> None:
+    """平方阶"""
+    # 二维列表占用 O(n^2) 空间
+    num_matrix: list[list[int]] = [[0] * n for _ in range(n)]
+
+```
+
+#### 指数阶O(2^n)
+```python
+def build_tree(n: int) -> TreeNode | None:
+    """指数阶（建立满二叉树）"""
+    if n == 0:
+        return None
+    root = TreeNode(0)
+    root.left = build_tree(n - 1)
+    root.right = build_tree(n - 1)
+    return root
+
+```
