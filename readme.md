@@ -1962,6 +1962,191 @@ print(alist)
 
 ### 散列Hashing
 
+如果数据项之间是按照大小排序，就可以使用二分查找来降低算法复杂度。
+但是如果我们进一步构造一个数据结构，使得查找算法降低O(1), 这种概念被称为“散列”。
+
+散列表：hash table，是一种数据集，快速查找定位。每一个存储位置称为槽（slot），可用来保存数据项，每个槽具有唯一的名称。
+实现数据项到存储槽名称转换的，称为散列函数（hash function）。
+```python
+class Demo(object):
+
+def __init__(self, **kwargs) -> None:
+
+self.data = kwargs["data"]
+
+self.hashTable = kwargs["hashTable"]
+
+  
+
+def h(self):
+
+"""
+
+将数据取余，填入散列表。
+
+如果存在冲突collision，我们可以使用完美散列函数。
+
+"""
+
+for i in self.data:
+
+index = i % len(self.hashTable)
+
+self.hashTable[index] = i
+
+  
+
+def search(self, target):
+
+index = target % len(self.hashTable)
+
+if self.hashTable[index] != target:
+
+return False
+
+return True
+
+  
+
+def run(self):
+
+self.h()
+
+"""
+
+槽被数据项占据的比例称为散列表的“负载因子”，这里负载因子为6/11。
+
+如果要查找某个数据是否存在于表中，我们只需要同一个散列函数，对查找项进行计算，测试返回的槽号所对应的槽中是否有数据项即可。实现了O（1）的复杂度的算法。
+
+"""
+
+print(self.hashTable)
+
+  
+  
+
+if __name__ == "__main__":
+
+data = [56, 26, 93, 17, 31, 77]
+
+hashTable = [None for _ in range(11)]
+
+D = Demo(data=data, hashTable=hashTable)
+
+D.run()
+
+result = D.search(18)
+
+print(result)
+```
+
+#### 完美散列函数
+典型的拿空间换时间。
+![](readme.assets/Pasted%20image%2020230528162405.png)
+再怎么散列数据，也会出现槽位不够用的情况。形成1对1映射情况。
+![](readme.assets/Pasted%20image%2020230528163107.png)
+作为一致性校验的数据指纹函数，需要具备如下特性。
+![](readme.assets/Pasted%20image%2020230528164106.png)
+#### 近似完美散列
+##### MD5
+md5函数：可以将任何长度的数据变换成为固定长度为128bit的摘要。
+##### SHA
+sha-0/sha-1 输出散列值160bit。
+sha-256/sha-224 分别输出散列值256bit，224bit。
+sha-512/sha-384 分别输出散列值512bit，384bit。
+```python
+import hashlib as hs
+
+  
+  
+
+def md5(str):
+
+return hs.md5(str).hexdigest()
+
+  
+  
+
+def sha1(str):
+
+return hs.sha1(str).hexdigest()
+
+  
+  
+
+def md5Step(str):
+
+m = hs.md5()
+
+m.update(str)
+
+  
+
+return m.hexdigest()
+
+  
+  
+
+if __name__ == "__main__":
+
+message = "Hello, world!".encode("utf-8")
+
+print(message)
+
+print(md5(message))
+
+print(sha1(message))
+
+print(md5Step(message))
+```
+#### 其他用处
+![](readme.assets/Pasted%20image%2020230528170227.png)
+![](readme.assets/Pasted%20image%2020230528170326.png)
+![](readme.assets/Pasted%20image%2020230528170352.png)
+
+#### 区块链技术
+本质：分布式数据库
+![](readme.assets/Pasted%20image%2020230528170858.png)
+![](readme.assets/Pasted%20image%2020230528170956.png)
+![](readme.assets/Pasted%20image%2020230528171232.png)
+##### 为什么区块链技术不具有伪造性？
+![](readme.assets/Pasted%20image%2020230528171300.png)
+![](readme.assets/Pasted%20image%2020230528171452.png)
+![](readme.assets/Pasted%20image%2020230528171649.png)
+散列值无法逆向。
+![](readme.assets/Pasted%20image%2020230528171752.png)
+bitcoin比特币中的一个区块。
+![](readme.assets/Pasted%20image%2020230528171934.png)
+![](readme.assets/Pasted%20image%2020230528172050.png)
+维持方式：
+![](readme.assets/Pasted%20image%2020230528172157.png)
+#### 散列函数的设计
+
+
+
+
+##### 冲突解决方案
+
+
+
+
+
+#### 映射抽象数据类型
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### 树Tree
