@@ -2121,34 +2121,334 @@ bitcoin比特币中的一个区块。
 维持方式：
 ![](readme.assets/Pasted%20image%2020230528172157.png)
 #### 散列函数的设计
+##### 折叠法
+```python
+#!/usr/bin/python
 
+# -*- coding: utf-8 -*-
 
+  
+  
 
+class Demo(object):
+
+def __init__(self, solt, data) -> None:
+
+self.data = data
+
+self.solt = solt
+
+  
+
+def splitTwo(self):
+
+start = 0
+
+end = 0
+
+self.ls = []
+
+for index, value in enumerate(self.data):
+
+if index % 2 == 1:
+
+end = index
+
+self.ls.append(self.data[start : end + 1])
+
+else:
+
+start = index
+
+  
+
+def exChange(self):
+
+for index, value in enumerate(self.ls):
+
+if index % 2 == 1:
+
+self.ls[index] = value[::-1]
+
+  
+
+def hashTable(self):
+
+result = sum(map(lambda x: int(x), self.ls))
+
+remainder = result % len(self.solt)
+
+self.solt[remainder] = self.data
+
+  
+
+def search(self, target):
+
+self.data = target
+
+self.splitTwo()
+
+self.exChange()
+
+result = sum(map(lambda x: int(x), self.ls))
+
+remainder = result % len(self.solt)
+
+# 判断槽位对应内容，是否和target一致。
+
+if self.solt[remainder] == target:
+
+return True
+
+  
+
+return False
+
+  
+
+def run(self):
+
+# 拆分折叠
+
+self.splitTwo()
+
+# 隔数反转
+
+self.exChange()
+
+# hash table
+
+self.hashTable()
+
+return self.solt
+
+  
+  
+
+if __name__ == "__main__":
+
+data = "12345678"
+
+solt = [None for _ in range(11)]
+
+D = Demo(solt=solt, data=data)
+
+done = D.run()
+
+print(done)
+
+done = D.search("1234")
+
+print(done)
+```
+##### 平方取中法
+```python
+def middleSquareMethod(data, slot):
+
+data = str(data**2)
+
+middleEnd = len(data) // 2
+
+middleStart = middleEnd - 1
+
+result = int(data[middleStart] + data[middleEnd])
+
+# 开始进行散列函数
+
+index = result % len(slot)
+
+slot[index] = data
+
+return slot
+
+  
+  
+
+if __name__ == "__main__":
+
+data = 44
+
+slot = [None for _ in range(11)]
+
+result = middleSquareMethod(data, slot)
+
+print(result)
+```
+##### 非数项
+字符串ascii转换。
+```python
+def hashStr(data, slot):
+
+result = []
+
+for i in data:
+
+result.append(ord(i))
+
+done = sum(result)
+
+# 开始散列
+
+index = done % len(slot)
+
+slot[index] = data
+
+  
+
+return slot
+
+  
+  
+
+if __name__ == "__main__":
+
+data = "asdsdaf"
+
+slot = [None for i in range(11)]
+
+print(hashStr(data, slot))
+```
+基本出发点，散列函数不能成为存储和查找过程的计算负载。
 
 ##### 冲突解决方案
-
-
-
-
+得想个办法，解决多对一的问题。
+![](readme.assets/Pasted%20image%2020230528215502.png)
+##### 开放定址
+![](readme.assets/Pasted%20image%2020230528215720.png)
+###### 线性探测
+![](readme.assets/Pasted%20image%2020230528215845.png)
+###### 跳跃式探测
+![](readme.assets/Pasted%20image%2020230528215955.png)
+###### 再散列
+散列表的大小建议为素数。
+![](readme.assets/Pasted%20image%2020230528220110.png)
+###### 二次探测
+![](readme.assets/Pasted%20image%2020230528220209.png)
+###### 数据项链
+![](readme.assets/Pasted%20image%2020230528220252.png)
 
 #### 映射抽象数据类型
+手动创建映射map类型。
+![](readme.assets/Pasted%20image%2020230528220557.png)
+
+```python
 
 
+#!/usr/bin/python
 
+# -*- coding: utf-8 -*-
 
+  
+  
 
+class HashTable(object):
 
+def __init__(self) -> None:
 
+self.size = 11
 
+self.slots = [None] * self.size
 
+self.data = [None] * self.size
 
+  
 
+def hashfunction(self, key):
 
+return key % self.size
 
+  
 
+def rehash(self, oldHash):
 
+return (oldHash + 1) % self.size
 
+  
 
+def put(self, key, data):
+
+hashvalue = self.hashfunction(key)
+
+  
+
+if self.slots[hashvalue] is None:
+
+self.slots[hashvalue] = key
+
+self.data[hashvalue] = data
+
+else:
+
+if self.slots[hashvalue] == key:
+
+self.data[hashvalue] = data
+
+else:
+
+nextslot = self.rehash(hashvalue)
+
+while self.slots[nextslot] is not None and self.slots[nextslot] != key:
+
+nextslot = self.rehash(nextslot)
+
+if self.slots[nextslot] is not None:
+
+self.slots[nextslot] = key
+
+self.data[nextslot] = data
+
+else:
+
+self.data[nextslot] = data
+
+  
+
+def get(self, key):
+
+startslot = self.hashfunction(key)
+
+data = None
+
+stop = False
+
+found = False
+
+position = startslot.find
+
+  
+
+while self.slots[position] is not None and not found and not stop:
+
+if self.slots[position] == key:
+
+found = True
+
+data = self.data[position]
+
+else:
+
+position = self.rehash(position)
+
+if position == startslot:
+
+stop = True
+
+return data
+
+  
+
+def __getitem__(self, key):
+
+return self.get(key)
+
+  
+
+def __setitem__(self, key, data):
+
+self.put(key, data)
+```
+![](readme.assets/Pasted%20image%2020230528223622.png)
+![](readme.assets/Pasted%20image%2020230528223659.png)
 ### 树Tree
 
 
