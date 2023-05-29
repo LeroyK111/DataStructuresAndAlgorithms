@@ -2461,6 +2461,14 @@ self.put(key, data)
 ![](readme.assets/Pasted%20image%2020230528230220.png)
 ![](readme.assets/Pasted%20image%2020230528230248.png)
 #### 名词解释
+节点Node：组成树的基本部分。
+每个
+
+
+
+
+
+
 
 
 
