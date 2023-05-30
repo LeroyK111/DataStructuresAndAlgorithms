@@ -2450,9 +2450,9 @@ self.put(key, data)
 ![](readme.assets/Pasted%20image%2020230528223622.png)
 ![](readme.assets/Pasted%20image%2020230528223659.png)
 ### 树Tree
-基本的非线性的数据结构：树。
+**基本的非线性的数据结构：树。
 分为基本三部分：根root，枝branch，叶leaf
-特点：层次化，独立隔离，唯一。
+特点：层次化，独立隔离，唯一。**
 ![](readme.assets/Pasted%20image%2020230528230007.png)
 ![](readme.assets/Pasted%20image%2020230528230037.png)
 ![](readme.assets/Pasted%20image%2020230528230059.png)
