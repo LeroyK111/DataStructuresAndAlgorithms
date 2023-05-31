@@ -2462,10 +2462,362 @@ self.put(key, data)
 ![](readme.assets/Pasted%20image%2020230528230248.png)
 #### 名词解释
 节点Node：组成树的基本部分。
-每个
+每个节点具有名称，或“键值”，节点还可以保存额外数据项，根据不同的应用而变。
 
+边Edge: 边是组成树的另一个部分
+每条边恰好连接两个节点，表示节点之间具有关联，边具有出入方向。
+每个节点（除根节点外）恰有一条来自另一节点的入边。
+每个节点可以有多条连到其他节点的出边。
 
+根root：数中唯一没有入边的节点。
 
+路径Path：由边依次连接在一起的节点的有序列表。
+
+![](readme.assets/Pasted%20image%2020230601003703.png)
+子节点children：入边均来自同一个节点的若干节点，称为这个节点的子节点。
+父节点Parent:  一个节点是其他所有出边的连接节点的父节点。
+![](readme.assets/Pasted%20image%2020230601003928.png)
+兄弟节点Sibling: 具有同一个父节点的节点之间称为兄弟节点。
+子树Subtree：一个节点和其他所有子孙节点，以及相关边的集合。
+![](readme.assets/Pasted%20image%2020230601004600.png)
+叶节点Leaf：没有子节点的节点称为叶节点。
+层级Level：从根节点开始到达一个节点的路径，所包含的边数量，称为这个节点的层级。
+高度：树中所有节点的最大层级称为树的高度。
+![](readme.assets/Pasted%20image%2020230601004755.png)
+##### 树的定义1——连接定义
+![](readme.assets/Pasted%20image%2020230601004956.png)
+##### 树的定义2——递归定义
+![](readme.assets/Pasted%20image%2020230601005104.png)
+##### 嵌套列表法
+![](readme.assets/Pasted%20image%2020230601005749.png)
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+"""
+
+! 使用列表[root, left, right]嵌套实现二叉树
+
+"""
+
+  
+
+myTree = ["a", ["b", ["d"], ["e"]], ["c", ["f"]]]
+
+  
+  
+
+def BinaryTree(r):
+
+return [r, [], []]
+
+  
+  
+
+def insertLeft(root, newBranch):
+
+t = root.pop()
+
+if len(t) > 1:
+
+root.insert(1, [newBranch, t, []])
+
+else:
+
+root.insert(1, [newBranch, t, [], []])
+
+  
+
+return root
+
+  
+  
+
+def insertRight(root, newBranch):
+
+t = root.pop()
+
+if len(t) > 1:
+
+root.insert(2, [newBranch, [], t])
+
+else:
+
+root.insert(2, [newBranch, [], []])
+
+return root
+
+  
+  
+
+def getRootVal(root):
+
+return root[0]
+
+  
+  
+
+def setRootVal(root, newVal):
+
+root[0] = newVal
+
+  
+  
+
+def getLeftChild(root):
+
+return root[1]
+
+  
+  
+
+def getRightChild(root):
+
+return root[2]
+
+  
+  
+
+if __name__ == "__main__":
+
+# print(myTree)
+
+  
+
+r = BinaryTree(3)
+
+insertLeft(r, 4)
+
+insertLeft(r, 5)
+
+insertRight(r, 6)
+
+insertRight(r, 7)
+
+ls = getLeftChild(r)
+
+print(ls)
+
+  
+
+setRootVal(ls, 9)
+
+print(r)
+
+  
+
+insertLeft(ls, 11)
+
+print(r)
+
+print(getRightChild(getRightChild(r)))
+```
+##### 节点链接法
+**本质就是对象的嵌套，每个对象都存储了两个地址，一个自身值**
+![](readme.assets/Pasted%20image%2020230601014459.png)
+```python
+"""
+
+生成二叉树
+
+"""
+
+  
+  
+
+class Node(object):
+
+def __init__(self, data):
+
+self.left = None # 左节点
+
+self.right = None # 右节点
+
+self.data = data # 值
+
+  
+
+def insert(self, data):
+
+if data is None:
+
+# 让-999替代none
+
+data = -999
+
+  
+
+# 将新值与父节点进行比较
+
+if self.data: # 非空
+
+if data <= self.data: # !新值较小，放左边，考虑到none值的存在，所以小于等于，不然直接小于就行
+
+if self.left is None: # 若空，则新建插入节点
+
+# !新建一个对象，传入当前根节点的左节点对象，
+
+self.left = Node(data)
+
+else: # !否则，递归调用对象的方法，往下查找，
+
+self.left.insert(data)
+
+elif data > self.data: # 新值较大，放右边
+
+if self.right is None: # 若空，则新建插入对象
+
+self.right = Node(data)
+
+else: # 否则，递归往下查找
+
+self.right.insert(data)
+
+else:
+
+# 空值则只有起始对象
+
+self.data = data
+
+  
+
+def PrintTree(self):
+
+# 这里使用的还是中序遍历
+
+if self.left:
+
+self.left.PrintTree()
+
+print(self.data)
+
+if self.right:
+
+self.right.PrintTree()
+
+  
+
+def fil(self, data: list):
+
+return list(map(lambda x: None if x == -999 else x, data))
+
+  
+
+# 中序遍历
+
+# Left -> Root -> Right
+
+def inorderTraversal(self, root):
+
+res = []
+
+if root:
+
+# 先查找左节点
+
+res = self.inorderTraversal(root.left)
+
+# 加入根节点
+
+res.append(root.data)
+
+# 开始查找右节点
+
+res = res + self.inorderTraversal(root.right)
+
+return self.fil(res)
+
+  
+
+# 先序遍历
+
+# Root -> Left ->Right
+
+def PreorderTraversal(self, root):
+
+res = []
+
+if root:
+
+res.append(root.data)
+
+res = res + self.PreorderTraversal(root.left)
+
+res = res + self.PreorderTraversal(root.right)
+
+return self.fil(res)
+
+  
+
+# 后序遍历
+
+# Left ->Right -> Root
+
+def PostorderTraversal(self, root):
+
+res = []
+
+if root:
+
+res = self.PostorderTraversal(root.left)
+
+res = res + self.PostorderTraversal(root.right)
+
+res.append(root.data)
+
+return self.fil(res)
+
+  
+  
+
+if __name__ == "__main__":
+
+# 创建节点
+
+root = Node(12)
+
+# 插入节点
+
+root.insert(6)
+
+root.insert(14)
+
+root.insert(3)
+
+  
+
+# 打印所有的树
+
+# root.PrintTree()
+
+  
+
+# 中序遍历 [3, 6, 12, 14]
+
+result = root.inorderTraversal(root)
+
+print(result)
+
+# 先序遍历 [12, 6, 3, 14]
+
+result = root.PreorderTraversal(root)
+
+print(result)
+
+# 后续遍历 [3, 6, 14, 12]
+
+result = root.PostorderTraversal(root)
+
+print(result)
+```
+##### 树的解析——语法树
+![](readme.assets/Pasted%20image%2020230601015655.png)
+![](readme.assets/Pasted%20image%2020230601015738.png)
+![](readme.assets/Pasted%20image%2020230601015812.png)
 
 
 
