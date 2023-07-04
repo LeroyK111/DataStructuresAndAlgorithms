@@ -2998,8 +2998,250 @@ print(tree.getRootVal())
 inorder(tree.getRightChild())
 ```
 ##### 优先队列和二叉堆
+队列本身是先进先出FIFO数据结构。
+但是存在一种队列变体称为“优先队列”，在系统进程调度中某些重要进程可以插入到队列最前。
+思路：出栈还是pop，但是入栈需要根据value的优先级，插队进入 到 某个index 上。
+
+方法：
+优先队列的经典方案是采用二叉堆数据结构，能够将入队和出队复杂度都保持在O(log n)
+二叉堆的有趣之处在于其逻辑上似二叉树，却是用非嵌套的列表来实现的。
+最小key排在队首，称为 “最小堆minheap”。反之，最大key排在队首的是”最大堆max heap“
+
+![](readme.assets/Pasted%20image%2020230704222926.png)
+满二叉树，平衡二叉树、是最理想的情况。
+
+但是往往都是由完全二叉树进行 叶节点 的生成。
+
+通过无序表做列表实现。
+![](readme.assets/Pasted%20image%2020230704223123.png)
+堆次序。
+![](readme.assets/Pasted%20image%2020230704223521.png)
+
+优先队列的实现
+```python
+from pythonds.trees.binheap import BinHeap
+
+  
+  
+
+class Solution(object):
+
+def run(self):
+
+self.bh = BinHeap()
+
+self.bh.insert(5)
+
+self.bh.insert(1)
+
+self.bh.insert(8)
+
+self.bh.insert(11)
+
+  
+
+def reads(self):
+
+print(self.bh.delMin())
+
+print(self.bh.delMin())
+
+print(self.bh.delMin())
+
+print(self.bh.delMin())
+
+  
+  
+
+if __name__ == "__main__":
+
+sl = Solution()
+
+sl.run()
+
+sl.reads()
 
 
+
+```
+
+##### 二叉堆的实现
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+class Demo(object):
+
+def __init__(self) -> None:
+
+self.heapList = [0]
+
+self.currentSize = 0
+
+  
+
+def percUp(self, i):
+
+while i // 2 > 0:
+
+if self.heapList[i] < self.heapList[i // 2]:
+
+tmp = self.heapList[i // 2]
+
+# 与父节点交换位置
+
+self.heapList[i // 2] = self.heapList[i]
+
+self.heapList[i] = tmp
+
+# 沿路经向下
+
+i = i // 2
+
+  
+
+def percDown(self, i):
+
+while (i * 2) <= self.currentSize:
+
+mc = self.minChild(i)
+
+if self.heapList[i] > self.heapList[mc]:
+
+tmp = self.heapList[i]
+
+# 交换下沉
+
+self.heapList[i] = self.heapList[mc]
+
+self.heapList[mc] = tmp
+
+i = mc
+
+  
+
+def minChild(self, i):
+
+if i * 2 + 1 > self.currentSize:
+
+# 唯一子节点
+
+return i * 2
+
+else:
+
+# 返回较小的
+
+  
+
+if self.heapList[i * 2] < self.heapList[i * 2 + 1]:
+
+return i * 2
+
+else:
+
+return i * 2 + 1
+
+  
+
+def delMin(self):
+
+"""
+
+当你移除根节点时，为了保持二叉树的完整性，只能用最后一个节点代替根节点。下沉路径的选择。
+
+"""
+
+# 移走堆顶
+
+retval = self.heapList[1]
+
+self.heapList[1] = self.heapList[self.currentSize]
+
+self.currentSize = self.currentSize - 1
+
+self.heapList.pop()
+
+# 新顶下沉
+
+self.percDown(1)
+
+return retval
+
+  
+
+def insert(self, key):
+
+"""
+
+!新key加载队表末尾，显然无法保持“堆”次序，虽然对其他路径的次序没有影响，但对于其到根路径可能破坏次序。
+
+"""
+
+# 添加到末尾
+
+self.heapList.append(key)
+
+self.currentSize += 1
+
+# 新key上浮
+
+self.percUp(self.currentSize)
+
+  
+
+def buildHeap(self, alist):
+
+# 从无序表生成堆，这里从父节点下沉法
+
+i = len(alist) // 2
+
+self.currentSize = len(alist)
+
+self.heapList = [0] + alist[:]
+
+print(len(self.heapList), i)
+
+while i < 0:
+
+print(self.heapList[i], i)
+
+self.percDown(i)
+
+i -= 1
+
+print(self.heapList, i)
+
+  
+  
+
+if __name__ == '__main__':
+
+D = Demo()
+
+D.insert(123)
+
+D.insert(13)
+
+D.insert(12)
+
+D.insert(1)
+
+  
+
+print(D.delMin())
+
+print(D.delMin())
+
+print(D.delMin())
+
+print(D.delMin())
+```
+##### 二叉查找树
 
 
 

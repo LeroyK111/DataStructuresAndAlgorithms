@@ -77,7 +77,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "651d20526e0596c9",
@@ -157,6 +158,10 @@
   },
   "active": "f5456325884fd744",
   "lastOpenFiles": [
+    "二叉堆.py",
+    "readme.assets/Pasted image 20230704223521.png",
+    "readme.assets/Pasted image 20230704223123.png",
+    "readme.assets/Pasted image 20230704222926.png",
     "readme.md",
     "未命名.md",
     "优先队列和二叉堆.py",
@@ -171,9 +176,6 @@
     "二叉树嵌套列表法.py",
     "readme.assets/Pasted image 20230601005104.png",
     "readme.assets/Pasted image 20230601004956.png",
-    "readme.assets/Pasted image 20230601004755.png",
-    "readme.assets/Pasted image 20230601004600.png",
-    "readme.assets/Pasted image 20230601003928.png",
     "treeNode.py",
     "定义Map.py",
     "非数项.py",
