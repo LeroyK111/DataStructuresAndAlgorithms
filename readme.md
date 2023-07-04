@@ -3242,10 +3242,23 @@ print(D.delMin())
 print(D.delMin())
 ```
 ##### 二叉查找树
+Binary Search  Tree
+
+有序表数据结构+二分搜索算法
+散列表数据结构+散列及冲突解决算法
+
+核心：
+二叉树数据结构+二叉树搜索算法
+![](readme.assets/Pasted%20image%2020230705005335.png)
+![](readme.assets/Pasted%20image%2020230705005419.png)
+
+BST
+
+TreeNode
+```python
 
 
-
-
+```
 
 
 
