@@ -3252,18 +3252,1463 @@ Binary Search  Tree
 ![](readme.assets/Pasted%20image%2020230705005335.png)
 ![](readme.assets/Pasted%20image%2020230705005419.png)
 
-BST
-
-TreeNode
+BST & TreeNode
 ```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+class TreeNode:
+
+def __init__(self, key, val, left=None, right=None, parent=None) -> None:
+
+self.key = key
+
+self.payload = val
+
+self.leftChild = left
+
+self.rightChild = right
+
+self.parent = parent
+
+  
+
+def hasLeftChild(self):
+
+return self.leftChild
+
+  
+
+def hasRightChild(self):
+
+return self.rightChild
+
+  
+
+def isLeftChild(self):
+
+return self.parent and self.parent.leftChild == self
+
+  
+
+def isRightChild(self):
+
+return self.parent and self.parent.rightChild == self
+
+  
+
+def isRoot(self):
+
+return not self.parent
+
+  
+
+def isLeaf(self):
+
+return not (self.rightChild or self.leftChild)
+
+  
+
+def hasAnyChildren(self):
+
+return self.rightChild or self.leftChild
+
+  
+
+def hasBothChildren(self):
+
+return self.rightChild and self.leftChild
+
+  
+
+def replaceNodeData(self, key, value, lc, rc):
+
+self.key = key
+
+self.payload = value
+
+self.leftChild = lc
+
+self.rightChild = rc
+
+  
+
+if self.hasLeftChild():
+
+self.leftChild.parent = self
+
+if self.hasRightChild():
+
+self.rightChild.parent = self
+
+  
+
+def __iter__(self):
+
+# 迭代器
+
+if self:
+
+if self.hasLeftChild():
+
+for elem in self.leftChild:
+
+yield elem
+
+yield self.key
+
+if self.hasRightChild():
+
+for elem in self.rightChild:
+
+yield elem
+
+  
+
+def findSuccessor(self):
+
+succ = None
+
+if self.hasRightChild():
+
+succ = self.rightChild.findMin()
+
+else:
+
+if self.parent:
+
+if self.isLeftChild():
+
+succ = self.parent
+
+else:
+
+self.parent.rightChild = None
+
+succ = self.parent.findSuccessor()
+
+self.parent.rightChild = self
+
+return succ
+
+  
+
+def findMin(self):
+
+current = self
+
+while current.hasLeftChild():
+
+current = current.leftChild
+
+return current
+
+  
+
+def spliceOut(self):
+
+if self.isLeaf():
+
+if self.isLeftChild():
+
+self.parent.leftChild = None
+
+else:
+
+self.parent.rightChild = None
+
+elif self.hasAnyChildren():
+
+if self.hasLeftChild():
+
+if self.isLeftChild():
+
+self.parent.leftChind = self.leftChild
+
+else:
+
+self.parent.rightChind = self.leftChild
+
+self.leftChild.parent = self.parent
+
+else:
+
+if self.isLeftChild():
+
+self.parent.leftChind = self.rightChild
+
+else:
+
+self.parent.rightChind = self.rightChild
+
+self.rightChild.parent = self.parent
+
+  
+  
+
+class BinarySearchTree:
+
+# 构造b树
+
+def __init__(self) -> None:
+
+self.root = None
+
+self.size = 0
+
+  
+
+def length(self):
+
+return self.size
+
+  
+
+def __len__(self):
+
+return self.size
+
+  
+
+def __iter__(self):
+
+return self.root.__iter__()
+
+  
+
+def put(self, key, val):
+
+if self.root:
+
+self._put(key, val, self.root)
+
+else:
+
+self.root = TreeNode(key, val)
+
+self.size += 1
+
+  
+
+def _put(self, key, val, currentNode):
+
+# 插入子树
+
+if key < currentNode.key:
+
+# 左子树
+
+if currentNode.hasLeftChild():
+
+self._put(key, val, currentNode.leftChild)
+
+else:
+
+currentNode.leftChild = TreeNode(key, val, parent=currentNode)
+
+else:
+
+if currentNode.hasRightChild():
+
+# 右子树
+
+self._put(key, val, currentNode.rightChild)
+
+else:
+
+currentNode.rightChild = TreeNode(key, val, parent=currentNode)
+
+  
+
+def __setitem__(self, k, v):
+
+# 拦截字典传参数
+
+self.put(k, v)
+
+  
+
+def get(self, key):
+
+if self.root:
+
+res = self._get(key, self.root)
+
+if res:
+
+return res.payload
+
+else:
+
+return None
+
+else:
+
+return None
+
+  
+
+def _get(self, key, currentNode):
+
+if not currentNode:
+
+return None
+
+elif currentNode.key == key:
+
+return currentNode
+
+elif key < currentNode.key:
+
+return self._get(key, currentNode.leftChild)
+
+else:
+
+return self._get(key, currentNode.rightChild)
+
+  
+
+def __getitem__(self, key):
+
+return self.get(key)
+
+  
+
+def __contains__(self, key):
+
+if self._get(key, self.root):
+
+return True
+
+else:
+
+return False
+
+  
+
+def remove(self, currentNode):
+
+if currentNode.isLeaf():
+
+# 没有子节点的方法，直接删除
+
+if currentNode == currentNode.parent.leftChild:
+
+currentNode.parent.leftChild = None
+
+else:
+
+currentNode.parent.rightChild = None
+
+elif currentNode.hasBothChildren():
+
+succ = currentNode.findSuccessor()
+
+succ.spliceOut()
+
+currentNode.key = succ.key
+
+currentNode.payload = succ.payload
+
+else:
+
+if currentNode.hasLeftChild():
+
+if currentNode.isLeftChild():
+
+# 左子节点删除
+
+currentNode.leftChild.parent = currentNode.parent
+
+currentNode.parent.leftChild = currentNode.leftChild
+
+elif currentNode.isRightChild():
+
+# 右子节点删除
+
+currentNode.leftChild.parent = currentNode.parent
+
+currentNode.parent.rightChild = currentNode.rightChild
+
+else:
+
+# 根节点删除
+
+currentNode.replaceNodeData(
+
+currentNode.leftChild,
+
+currentNode.leftChild.payload,
+
+currentNode.leftChild.leftChild,
+
+currentNode.leftChild.rightChild,
+
+)
+
+else:
+
+if currentNode.isLeftChild():
+
+# 左子节点删除
+
+currentNode.rightChild.parent = currentNode.parent
+
+currentNode.parent.leftChild = currentNode.leftChild
+
+elif currentNode.isRightChild():
+
+# 右子节点
+
+currentNode.rightChild.parent = currentNode.parent
+
+currentNode.parent.rightChild = currentNode.rightChild
+
+else:
+
+# 根节点删除
+
+currentNode.replaceNodeData(
+
+currentNode.rightChild,
+
+currentNode.rightChild.payload,
+
+currentNode.rightChild.leftChild,
+
+currentNode.rightChild.rightChild,
+
+)
+
+  
+
+def delete(self, key):
+
+if self.size > 1:
+
+nodeToRemove = self._get(key, self.root)
+
+if nodeToRemove:
+
+self.remove(nodeToRemove)
+
+self.size -= 1
+
+else:
+
+raise KeyError("nof found key")
+
+  
+
+elif self.size == 1 and self.root.key == key:
+
+self.root = None
+
+self.size -= 1
+
+else:
+
+raise KeyError("not found key")
+
+  
+
+def __delitem__(self, key):
+
+self.delete(key)
+
+  
+  
+
+if __name__ == "__main__":
+
+myTree = BinarySearchTree()
+
+# 字典传参数
+
+myTree[3] = "red"
+
+myTree[4] = "blue"
+
+myTree[6] = "yellow"
+
+myTree[2] = "at"
+
+  
+
+# 归属判断
+
+print(3 in myTree)
+
+# 索引
+
+print(myTree[6])
+
+  
+
+# 删除
+
+del myTree[3]
+
+  
+
+# 循环
+
+for key in myTree:
+
+print(key, myTree[key])
+```
+
+##### AVL树的定义和性能
+与上一个完全二叉树不同，这里是平衡二叉树。
+![](readme.assets/Pasted%20image%2020230708222604.png)
+![](readme.assets/Pasted%20image%2020230708222738.png)
+![](readme.assets/Pasted%20image%2020230708223353.png)
+AVL平衡树可以保持BST树的性能，避免退化的情形。
+从子节点的不平衡性，会往父节点一直传递，直到根节点为止。
+但是当某一层父节点恢复到平衡因子为0时，则该层往上不会继续传递不平衡性。
+某个层级的节点更改，不会影响上层的平衡因子。
+
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+class TreeNode:
+
+def __init__(self, key, val, left=None, right=None, parent=None) -> None:
+
+self.key = key
+
+self.payload = val
+
+self.leftChild = left
+
+self.rightChild = right
+
+self.parent = parent
+
+  
+
+def hasLeftChild(self):
+
+return self.leftChild
+
+  
+
+def hasRightChild(self):
+
+return self.rightChild
+
+  
+
+def isLeftChild(self):
+
+return self.parent and self.parent.leftChild == self
+
+  
+
+def isRightChild(self):
+
+return self.parent and self.parent.rightChild == self
+
+  
+
+def isRoot(self):
+
+return not self.parent
+
+  
+
+def isLeaf(self):
+
+return not (self.rightChild or self.leftChild)
+
+  
+
+def hasAnyChildren(self):
+
+return self.rightChild or self.leftChild
+
+  
+
+def hasBothChildren(self):
+
+return self.rightChild and self.leftChild
+
+  
+
+def replaceNodeData(self, key, value, lc, rc):
+
+self.key = key
+
+self.payload = value
+
+self.leftChild = lc
+
+self.rightChild = rc
+
+  
+
+if self.hasLeftChild():
+
+self.leftChild.parent = self
+
+if self.hasRightChild():
+
+self.rightChild.parent = self
+
+  
+
+def __iter__(self):
+
+# 迭代器
+
+if self:
+
+if self.hasLeftChild():
+
+for elem in self.leftChild:
+
+yield elem
+
+yield self.key
+
+if self.hasRightChild():
+
+for elem in self.rightChild:
+
+yield elem
+
+  
+
+def findSuccessor(self):
+
+succ = None
+
+if self.hasRightChild():
+
+succ = self.rightChild.findMin()
+
+else:
+
+if self.parent:
+
+if self.isLeftChild():
+
+succ = self.parent
+
+else:
+
+self.parent.rightChild = None
+
+succ = self.parent.findSuccessor()
+
+self.parent.rightChild = self
+
+return succ
+
+  
+
+def findMin(self):
+
+current = self
+
+while current.hasLeftChild():
+
+current = current.leftChild
+
+return current
+
+  
+
+def spliceOut(self):
+
+if self.isLeaf():
+
+if self.isLeftChild():
+
+self.parent.leftChild = None
+
+else:
+
+self.parent.rightChild = None
+
+elif self.hasAnyChildren():
+
+if self.hasLeftChild():
+
+if self.isLeftChild():
+
+self.parent.leftChind = self.leftChild
+
+else:
+
+self.parent.rightChind = self.leftChild
+
+self.leftChild.parent = self.parent
+
+else:
+
+if self.isLeftChild():
+
+self.parent.leftChind = self.rightChild
+
+else:
+
+self.parent.rightChind = self.rightChild
+
+self.rightChild.parent = self.parent
+
+  
+  
+
+class BinarySearchTree:
+
+# 构造b树
+
+def __init__(self) -> None:
+
+self.root = None
+
+self.size = 0
+
+  
+
+def length(self):
+
+return self.size
+
+  
+
+def __len__(self):
+
+return self.size
+
+  
+
+def __iter__(self):
+
+return self.root.__iter__()
+
+  
+
+def put(self, key, val):
+
+if self.root:
+
+self._put(key, val, self.root)
+
+else:
+
+self.root = TreeNode(key, val)
+
+self.size += 1
+
+  
+
+# 调整因子
+
+def updateBalance(self, node):
+
+if node.balanceFactor > 1 or node.balanceFactor < -1:
+
+# 重新平衡函数
+
+self.rebalance(node)
+
+return
+
+if node.parent is not None:
+
+if node.isLeftChild():
+
+node.parent.balanceFactor += 1
+
+elif node.isRightChild():
+
+node.parent.balanceFactor -= 1
+
+if node.parent.balanceFactor != 0:
+
+# 调整父节点因子
+
+self.updateBalance(node.parent)
+
+  
+
+def rebalance(self, node):
+
+# 再平衡
+
+if node.balanceFactor < 0:
+
+# 右重需要右旋
+
+if node.rightChild.balanceFactor > 0:
+
+self.rotateRight(node.rightChild)
+
+self.rotateLeft(node)
+
+else:
+
+self.rotateLeft(node)
+
+elif node.balanceFactor > 0:
+
+if node.leftChild.balanceFactor < 0:
+
+self.rotateLeft(node.leftChild)
+
+self.rotateRight(node)
+
+else:
+
+self.rotateRight(node)
+
+  
+
+def rotateLeft(self, rotRoot):
+
+newRoot = rotRoot.rightChild
+
+rotRoot.rightChild = newRoot.leftChild
+
+if newRoot.leftChild is not None:
+
+newRoot.leftChild.parent = rotRoot
+
+newRoot.parent = newRoot.parent
+
+if rotRoot.isRoot():
+
+self.root = newRoot
+
+else:
+
+if rotRoot.isLeftChild():
+
+rotRoot.parent.leftChild = newRoot
+
+else:
+
+rotRoot.parent.rightChild = newRoot
+
+newRoot.leftchild = rotRoot
+
+rotRoot.parent = newRoot
+
+rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor, 0)
+
+newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor, 0)
+
+  
+
+def rotateRight(self, rotRoot):
+
+newRoot = rotRoot.leftChild
+
+rotRoot.leftChild = newRoot.rightChild
+
+if newRoot.rightChild is not None:
+
+newRoot.rightChild.parent = rotRoot
+
+newRoot.parent = newRoot.parent
+
+if rotRoot.isRoot():
+
+self.root = newRoot
+
+else:
+
+if rotRoot.isRightChild():
+
+rotRoot.parent.rightChild = newRoot
+
+else:
+
+rotRoot.parent.leftChild = newRoot
+
+newRoot.rightChild = rotRoot
+
+rotRoot.parent = newRoot
+
+rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor, 0)
+
+newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor, 0)
+
+  
+
+def _put(self, key, val, currentNode):
+
+if key < currentNode.key:
+
+# 左子树
+
+if currentNode.hasLeftChild():
+
+self._put(key, val, currentNode.leftChild)
+
+else:
+
+currentNode.leftChild = TreeNode(key, val, parent=currentNode)
+
+# 增加调整因子
+
+self.updateBalance(currentNode.leftChild)
+
+else:
+
+if currentNode.hasRightChild():
+
+# 右子树
+
+self._put(key, val, currentNode.rightChild)
+
+else:
+
+currentNode.rightChild = TreeNode(key, val, parent=currentNode)
+
+self.updateBalance(currentNode.rightClild)
+
+  
+
+def __setitem__(self, k, v):
+
+# 拦截字典传参数
+
+self.put(k, v)
+
+  
+
+def get(self, key):
+
+if self.root:
+
+res = self._get(key, self.root)
+
+if res:
+
+return res.payload
+
+else:
+
+return None
+
+else:
+
+return None
+
+  
+
+def _get(self, key, currentNode):
+
+if not currentNode:
+
+return None
+
+elif currentNode.key == key:
+
+return currentNode
+
+elif key < currentNode.key:
+
+return self._get(key, currentNode.leftChild)
+
+else:
+
+return self._get(key, currentNode.rightChild)
+
+  
+
+def __getitem__(self, key):
+
+return self.get(key)
+
+  
+
+def __contains__(self, key):
+
+if self._get(key, self.root):
+
+return True
+
+else:
+
+return False
+
+  
+
+def remove(self, currentNode):
+
+if currentNode.isLeaf():
+
+# 没有子节点的方法，直接删除
+
+if currentNode == currentNode.parent.leftChild:
+
+currentNode.parent.leftChild = None
+
+else:
+
+currentNode.parent.rightChild = None
+
+elif currentNode.hasBothChildren():
+
+succ = currentNode.findSuccessor()
+
+succ.spliceOut()
+
+currentNode.key = succ.key
+
+currentNode.payload = succ.payload
+
+else:
+
+if currentNode.hasLeftChild():
+
+if currentNode.isLeftChild():
+
+# 左子节点删除
+
+currentNode.leftChild.parent = currentNode.parent
+
+currentNode.parent.leftChild = currentNode.leftChild
+
+elif currentNode.isRightChild():
+
+# 右子节点删除
+
+currentNode.leftChild.parent = currentNode.parent
+
+currentNode.parent.rightChild = currentNode.rightChild
+
+else:
+
+# 根节点删除
+
+currentNode.replaceNodeData(
+
+currentNode.leftChild,
+
+currentNode.leftChild.payload,
+
+currentNode.leftChild.leftChild,
+
+currentNode.leftChild.rightChild,
+
+)
+
+else:
+
+if currentNode.isLeftChild():
+
+# 左子节点删除
+
+currentNode.rightChild.parent = currentNode.parent
+
+currentNode.parent.leftChild = currentNode.leftChild
+
+elif currentNode.isRightChild():
+
+# 右子节点
+
+currentNode.rightChild.parent = currentNode.parent
+
+currentNode.parent.rightChild = currentNode.rightChild
+
+else:
+
+# 根节点删除
+
+currentNode.replaceNodeData(
+
+currentNode.rightChild,
+
+currentNode.rightChild.payload,
+
+currentNode.rightChild.leftChild,
+
+currentNode.rightChild.rightChild,
+
+)
+
+  
+
+def delete(self, key):
+
+if self.size > 1:
+
+nodeToRemove = self._get(key, self.root)
+
+if nodeToRemove:
+
+self.remove(nodeToRemove)
+
+self.size -= 1
+
+else:
+
+raise KeyError("nof found key")
+
+  
+
+elif self.size == 1 and self.root.key == key:
+
+self.root = None
+
+self.size -= 1
+
+else:
+
+raise KeyError("not found key")
+
+  
+
+def __delitem__(self, key):
+
+self.delete(key)
+
+  
+  
+
+if __name__ == "__main__":
+
+myTree = BinarySearchTree()
+
+# 字典传参数
+
+myTree[3] = "red"
+
+myTree[4] = "blue"
+
+myTree[6] = "yellow"
+
+myTree[2] = "at"
+
+  
+
+# 归属判断
+
+print(3 in myTree)
+
+# 索引
+
+print(myTree[6])
+
+  
+
+# 删除
+
+del myTree[3]
+
+  
+
+# 循环
+
+for key in myTree:
+
+print(key, myTree[key])
+```
+
+#### 树结构时间复杂度
+![](readme.assets/Pasted%20image%2020230708232340.png)
+### 图Graph
+![](readme.assets/Pasted%20image%2020230708232634.png)
+![](readme.assets/Pasted%20image%2020230708232705.png)
+#### 六度分割理论
+![](readme.assets/Pasted%20image%2020230708232951.png)
+#### 术语表
+![](readme.assets/Pasted%20image%2020230708233019.png)
+![](readme.assets/Pasted%20image%2020230708233039.png)
+![](readme.assets/Pasted%20image%2020230708233058.png)
+![](readme.assets/Pasted%20image%2020230708233117.png)
+![](readme.assets/Pasted%20image%2020230708233140.png)
+![](readme.assets/Pasted%20image%2020230708233317.png)
+#### 图抽象数据类型
+ADT Graph实现的方法有两种主要形式：
+-  邻接矩阵 adjacency matrix
+![](readme.assets/Pasted%20image%2020230708234242.png)
+![](readme.assets/Pasted%20image%2020230708234341.png)
+简单实现
+```python
+from pythonds.graphs.adjGraph import Graph
+
+g = Graph()
+
+for i in range(6):
+
+g.addVertex(i)
+
+  
+  
+
+# 获取列表结构
+
+print(g.vertices)
+
+  
+
+# 在各个节点之间的边，插入权重
+
+g.addEdge(0, 1, 5)
+
+g.addEdge(0, 5, 2)
+
+g.addEdge(1, 2, 4)
+
+g.addEdge(2, 3, 9)
+
+g.addEdge(3, 4, 7)
+
+g.addEdge(3, 5, 3)
+
+g.addEdge(4, 0, 1)
+
+g.addEdge(5, 4, 8)
+
+g.addEdge(5, 2, 1)
+
+  
+
+for v in g:
+
+for w in v.getConnections():
+
+print("(%s, %s)" % (v.getId(), w.getId()))
+```
+实现方式
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+class Graph(object):
+
+def __init__(self):
+
+self.vertList = {}
+
+self.numVertices = 0
+
+  
+
+def addVertex(self, key):
+
+self.numVertices = self.numVertices + 1
+
+newVertex = Vertex(key)
+
+self.vertList[key] = newVertex
+
+return newVertex
+
+  
+
+def getVertex(self, n):
+
+if n in self.vertList:
+
+return self.vertList[n]
+
+else:
+
+return None
+
+  
+
+def __contains__(self, n):
+
+return n in self.vertList
+
+  
+
+def addEdge(self, f, t, cost=0):
+
+# 为每个顶点设置权重
+
+if f not in self.vertList:
+
+nv = self.addVertex(f)
+
+if t not in self.vertList:
+
+nv = self.addVertex(t)
+
+self.vertList[f].addNeighbor(self.vertList[t], cost)
+
+  
+
+def getVertices(self):
+
+return self.vertList.keys()
+
+  
+
+def __iter__(self):
+
+return iter(self.vertList.values())
+
+  
+  
+
+class Vertex:
+
+def __init__(self, key):
+
+self.id = key
+
+self.connectedTo = {}
+
+  
+
+def addNeighbor(self, nbr, weight=0):
+
+self.connectedTo[nbr] = weight
+
+  
+
+def __str__(self) -> str:
+
+return str(self.id) + "connectedTo: " + str([x.id for x in self.connectedTo])
+
+  
+
+def getConnectedTo(self):
+
+return self.connectedTo.keys()
+
+  
+
+def getId(self):
+
+return self.id
+
+  
+
+def getWeight(self, nbr):
+
+return self.connectedTo[nbr]
+
+  
+  
+
+if __name__ == "__main__":
+
+g = Graph()
+
+for i in range(6):
+
+g.addVertex(i)
+
+  
+
+# 获取列表结构
+
+print(g.vertList)
+
+  
+
+# 在各个节点之间的边，插入权重
+
+g.addEdge(0, 1, 5)
+
+g.addEdge(0, 5, 2)
+
+g.addEdge(1, 2, 4)
+
+g.addEdge(2, 3, 9)
+
+g.addEdge(3, 4, 7)
+
+g.addEdge(3, 5, 3)
+
+g.addEdge(4, 0, 1)
+
+g.addEdge(5, 4, 8)
+
+g.addEdge(5, 2, 1)
+
+  
+
+for v in g:
+
+for w in v.getConnectedTo():
+
+print("(%s, %s)" % (v.getId(), w.getId()))
+
+```
+
+-  邻接表 adjacent list
+![](readme.assets/Pasted%20image%2020230708234406.png)
+#### 词梯问题
+![](readme.assets/Pasted%20image%2020230709003704.png)
+![](readme.assets/Pasted%20image%2020230709004019.png)
+#### 广度优先搜索BFS
+![](readme.assets/Pasted%20image%2020230709004919.png)
+![](readme.assets/Pasted%20image%2020230709004933.png)
+![](readme.assets/Pasted%20image%2020230709005155.png)
+分桶存放
+![](readme.assets/Pasted%20image%2020230709005227.png)
+
+```python
+from pythonds.graphs.adjGraph import Graph
 
 
+def buildGraph(wordFile):
+
+d = {}
+
+g = Graph()
+
+wfile = open("wordFile", "r")
+
+for line in wfile:
+
+word = line[:-1]
+
+for i in range(len(word)):
+
+bucket = word[:i] + "-" + word[i + 1 :]
+
+if bucket in d:
+
+d[bucket].append(word)
+
+else:
+
+d[bucket] = [word]
+
+  
+
+for bucket in d.keys():
+
+for word1 in d[bucket]:
+
+for word2 in d[bucket]:
+
+if word1 != word2:
+
+g.addEdge(word1, word2)
+
+  
+
+return g
 ```
 
 
 
-
-### 图Graph
 
 
 

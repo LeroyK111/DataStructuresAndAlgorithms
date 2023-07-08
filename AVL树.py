@@ -119,20 +119,90 @@ class BinarySearchTree:
             self.root = TreeNode(key, val)
         self.size += 1
 
+    # 调整因子
+    def updateBalance(self, node):
+        if node.balanceFactor > 1 or node.balanceFactor < -1:
+            # 重新平衡函数
+            self.rebalance(node)
+            return
+        if node.parent is not None:
+            if node.isLeftChild():
+                node.parent.balanceFactor += 1
+            elif node.isRightChild():
+                node.parent.balanceFactor -= 1
+            if node.parent.balanceFactor != 0:
+                # 调整父节点因子
+                self.updateBalance(node.parent)
+
+    def rebalance(self, node):
+        # 再平衡
+        if node.balanceFactor < 0:
+            # 右重需要右旋
+            if node.rightChild.balanceFactor > 0:
+                self.rotateRight(node.rightChild)
+                self.rotateLeft(node)
+            else:
+                self.rotateLeft(node)
+        elif node.balanceFactor > 0:
+            if node.leftChild.balanceFactor < 0:
+                self.rotateLeft(node.leftChild)
+                self.rotateRight(node)
+            else:
+                self.rotateRight(node)
+
+    def rotateLeft(self, rotRoot):
+        newRoot = rotRoot.rightChild
+        rotRoot.rightChild = newRoot.leftChild
+        if newRoot.leftChild is not None:
+            newRoot.leftChild.parent = rotRoot
+        newRoot.parent = newRoot.parent
+        if rotRoot.isRoot():
+            self.root = newRoot
+        else:
+            if rotRoot.isLeftChild():
+                rotRoot.parent.leftChild = newRoot
+            else:
+                rotRoot.parent.rightChild = newRoot
+        newRoot.leftchild = rotRoot
+        rotRoot.parent = newRoot
+        rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor, 0)
+        newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor, 0)
+
+    def rotateRight(self, rotRoot):
+        newRoot = rotRoot.leftChild
+        rotRoot.leftChild = newRoot.rightChild
+        if newRoot.rightChild is not None:
+            newRoot.rightChild.parent = rotRoot
+        newRoot.parent = newRoot.parent
+        if rotRoot.isRoot():
+            self.root = newRoot
+        else:
+            if rotRoot.isRightChild():
+                rotRoot.parent.rightChild = newRoot
+            else:
+                rotRoot.parent.leftChild = newRoot
+        newRoot.rightChild = rotRoot
+        rotRoot.parent = newRoot
+        rotRoot.balanceFactor = rotRoot.balanceFactor + 1 - min(newRoot.balanceFactor, 0)
+        newRoot.balanceFactor = newRoot.balanceFactor + 1 + max(rotRoot.balanceFactor, 0)
+
     def _put(self, key, val, currentNode):
-        # 插入子树
         if key < currentNode.key:
             # 左子树
             if currentNode.hasLeftChild():
                 self._put(key, val, currentNode.leftChild)
             else:
                 currentNode.leftChild = TreeNode(key, val, parent=currentNode)
+                # 增加调整因子
+                self.updateBalance(currentNode.leftChild)
         else:
             if currentNode.hasRightChild():
                 # 右子树
                 self._put(key, val, currentNode.rightChild)
             else:
                 currentNode.rightChild = TreeNode(key, val, parent=currentNode)
+                # !存在问题
+                self.updateBalance(currentNode.rightClild)
 
     def __setitem__(self, k, v):
         # 拦截字典传参数
