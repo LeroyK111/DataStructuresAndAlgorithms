@@ -4661,10 +4661,34 @@ print("(%s, %s)" % (v.getId(), w.getId()))
 ![](readme.assets/Pasted%20image%2020230709005155.png)
 分桶存放
 ![](readme.assets/Pasted%20image%2020230709005227.png)
-
+避免走重复路，所以需要标记。
+![](readme.assets/Pasted%20image%2020230709131001.png)
 ```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+"""
+
+! 如何将大量的单词放入到图中：
+
+1.将单词作为顶点的key，如果两个单词之间只相差一个字母，就在他们之间设置一条边
+
+2.无向图==顶点之间没有权重
+
+"""
+
 from pythonds.graphs.adjGraph import Graph
 
+from pythonds.basic.queue import Queue
+
+import os
+
+  
+  
 
 def buildGraph(wordFile):
 
@@ -4672,11 +4696,13 @@ d = {}
 
 g = Graph()
 
-wfile = open("wordFile", "r")
+# 获取四字母单词集
+
+wfile = open(wordFile, "r")
 
 for line in wfile:
 
-word = line[:-1]
+word = line.strip()
 
 for i in range(len(word)):
 
@@ -4705,14 +4731,529 @@ g.addEdge(word1, word2)
   
 
 return g
+
+  
+  
+
+# BFS算法
+
+def bfs(g, start):
+
+start.setDistance(0)
+
+start.setPred(None)
+
+# 设置队列
+
+vertQueue = Queue()
+
+vertQueue.enqueue(start)
+
+while vertQueue.size() > 0:
+
+# 取队首作为当前顶点
+
+currentVert = vertQueue.dequeue()
+
+for nbr in currentVert.getConnections():
+
+# 遍历临街顶点
+
+if nbr.getColor() == "white":
+
+nbr.setColor("gray")
+
+nbr.setDistance(currentVert.getDistance() + 1)
+
+nbr.setPred(currentVert)
+
+vertQueue.enqueue(nbr)
+
+# 设置当前顶点为黑色
+
+currentVert.setColor("black")
+
+  
+  
+
+def traverse(y):
+
+x = y
+
+while x.getPred():
+
+print(x.getId())
+
+x = x.getPred()
+
+print(x.getId())
+
+  
+  
+
+if __name__ == "__main__":
+
+xpth = os.path.dirname(os.path.abspath(__file__))
+
+os.chdir(xpth)
+
+wordgraph = buildGraph("./word.txt")
+
+bfs(wordgraph, wordgraph.getVertex("FOOL"))
+
+traverse(wordgraph.getVertex("SAGE"))
+```
+
+#### 骑士周游问题
+![](readme.assets/Pasted%20image%2020230709133502.png)
+#### 深度优先搜索DFS
+![](readme.assets/Pasted%20image%2020230709141007.png)
+
+
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+
+from pythonds.graphs.adjGraph import Graph
+
+from pythonds.basic.stack import Stack
+
+  
+  
+
+def genLegalMoves(x, y, bdSize):
+
+newMoves = []
+
+# 马的八种走法
+
+moveOffsets = [(-1, -2), (-1, 2), (-2, -1), (-2, 1), (1, -2), (1, 2), (2, -1), (2, 1)]
+
+  
+
+for i in moveOffsets:
+
+newX = x + i[0]
+
+newY = y + i[1]
+
+if legalCoord(newX, bdSize) and legalCoord(newY, bdSize):
+
+newMoves.append((newX, newY))
+
+  
+
+return newMoves
+
+  
+  
+
+def legalCoord(x, bdSize):
+
+# 确认不走出棋盘
+
+if x >= 0 and x <= bdSize:
+
+return True
+
+else:
+
+return False
+
+  
+  
+
+def knightGraph(bdSize):
+
+ktGraph = Graph()
+
+for row in range(bdSize):
+
+# 遍历每个格子
+
+for col in range(bdSize):
+
+nodeId = posToNodeId(row, col, bdSize)
+
+# 单步合法走棋
+
+newPositions = genLegalMoves(row, col, bdSize)
+
+for e in newPositions:
+
+nid = posToNodeId(e[0], e[1], bdSize)
+
+# 添加边及顶点
+
+ktGraph.addEdge(nodeId, nid)
+
+return ktGraph
+
+  
+  
+
+def posToNodeId(row, col, bdSize):
+
+return row * bdSize + col
+
+  
+  
+
+def knightTour(n, path, u, limit):
+
+# n层次，path路径，u顶点，limit深度
+
+u.setColor("gray")
+
+# 当前顶点加入路径
+
+path.append(u)
+
+  
+
+if n < limit:
+
+# 对所有合法移动逐一深入
+
+nbrList = list(u.getConnections())
+
+i = 0
+
+done = False
+
+while i < len(nbrList) and not done:
+
+# 选择白色未经过顶点深入
+
+if nbrList[i].getColor() == "white":
+
+# 层次加一，递归深入
+
+done = knightTour(n + 1, path, nbrList[i], limit)
+
+i += 1
+
+if not done:
+
+# 都无法完成总深度，回溯，试本层下一个顶点
+
+path.pop()
+
+u.setColor("white")
+
+else:
+
+done = True
+
+return done
+```
+算法改进 Warnsdorff
+![](readme.assets/Pasted%20image%2020230709143743.png)
+
+```python
+def orderByAvail(n):
+	
+	resList = []
+	
+	for v in n.getConnections():
+	
+	if v.getColor() == "white":
+	
+	c = 0
+	
+	for w in v.getConnections():
+	
+	if w.getColor() == "white":
+	
+	c += 1
+	
+	resList.append((c, v))
+	
+	resList.sort(key=lambda x: x[0])
+	
+	return [y[1] for y in resList]
+
+```
+
+##### 通用深度优先搜索算法
+![](readme.assets/Pasted%20image%2020230709144001.png)
+深度优先森林
+![](readme.assets/Pasted%20image%2020230709144024.png)
+
+```python
+from pythonds.graphs import Graph
+
+  
+  
+
+class DFSGraph(Graph):
+
+def __init__(self):
+
+super().__init__()
+
+self.time = 0
+
+  
+
+def dfs(self):
+
+for aVertex in self:
+
+aVertex.setColor("white")
+
+aVertex.setPred(-1)
+
+for aVertex in self:
+
+if aVertex.getColor() == "white":
+
+self.dfsvisit(aVertex)
+
+  
+
+def dfsvisit(self, startVertex):
+
+startVertex.setColor("gray")
+
+self.time += 1
+
+startVertex.setDiscovery(startVertex)
+
+for nextVertex in startVertex:
+
+if nextVertex.getColor() == "white":
+
+nextVertex.setPred(-1)
+
+self.dfsvisit(nextVertex)
+
+startVertex.setColor("black")
+
+self.time += 1
+
+startVertex.setFinish(self.finish)
+```
+
+
+#### topological sort 拓扑排序
+![](readme.assets/Pasted%20image%2020230709151643.png)
+![](readme.assets/Pasted%20image%2020230709151908.png)
+![](readme.assets/Pasted%20image%2020230709152141.png)
+结束时间倒序
+![](readme.assets/Pasted%20image%2020230709152201.png)
+#### 强连通分支
+![](readme.assets/Pasted%20image%2020230709152629.png)
+聚类算法：离散数据集合，通过一定的条件，拆分称为多个子集，每个子集存在一个质心，这个质心就可以代表真个子集。然后让整个集合的数据量减少。
+![](readme.assets/Pasted%20image%2020230709152948.png)
+
+![](readme.assets/Pasted%20image%2020230709153029.png)
+![](readme.assets/Pasted%20image%2020230709153228.png)
+#### 最短路径
+![](readme.assets/Pasted%20image%2020230709153616.png)
+![](readme.assets/Pasted%20image%2020230709153634.png)
+```shell
+$ traceroute ip
+traceroute www.baidu.com
+
+traceroute: Warning: www.baidu.com has multiple addresses; using 104.193.88.77
+traceroute to www.wshifen.com (104.193.88.77), 64 hops max, 52 byte packets
+
+ 1  * * *
+
+ 2  172.20.21.254 (172.20.21.254)  213.519 ms  215.708 ms  234.393 ms
+
+ 3  172.20.22.3 (172.20.22.3)  222.874 ms  218.175 ms  223.813 ms
+
+ 4  * * *
+
+ 5  38.132.97.153 (38.132.97.153)  239.556 ms  235.334 ms  226.373 ms
+
+ 6  * * 146.70.0.211 (146.70.0.211)  214.701 ms
+
+ 7  ewr-b2-link.ip.twelve99.net (62.115.183.76)  226.584 ms
+
+    ewr-b2-link.ip.twelve99.net (62.115.62.253)  247.564 ms
+
+    ewr-b2-link.ip.twelve99.net (62.115.185.176)  232.204 ms
+
+ 8  nyk-bb2-link.ip.twelve99.net (62.115.136.46)  225.800 ms
+
+    nyk-bb2-link.ip.twelve99.net (62.115.140.192)  219.121 ms
+
+    nyk-bb1-link.ip.twelve99.net (62.115.136.44)  220.213 ms
+
+ 9  rest-bb1-link.ip.twelve99.net (62.115.141.244)  230.489 ms  235.732 ms  244.838 ms
+```
+可以列出经过的所有路由和服务。
+![](readme.assets/Pasted%20image%2020230709155416.png)
+![](readme.assets/Pasted%20image%2020230709155548.png)
+![](readme.assets/Pasted%20image%2020230709160142.png)
+![](readme.assets/Pasted%20image%2020230709160211.png)
+https://zhuanlan.zhihu.com/p/45062599
+- 现代计算机网络通常使用动态路由算法，因为这类算法能够适应网络的拓扑和流量变化，其中最流行的两种动态路由算法是“距离矢量路由算法”和“链路状态路由算法”。
+	- 距离矢量路由算法（Distance Vector Routing，DV）是ARPANET网络上最早使用的路由算法，也称Bellman-Ford路由算法和Ford-Fulkerson算法，主要在RIP（Route Information Protocol）协议中使用。Cisco的IGRP和EIGRP路由协议也是采用DV这种路由算法的。
+		- “距离矢量路由算法”的基本思想如下：每个路由器维护一个距离矢量（通常是以延时是作变量的）表，然后通过相邻路由器之间的距离矢量通告进行距离矢量表的更新。每个距离矢量表项包括两部分：到达目的结点的最佳输出线路，和到达目的结点所需时间或距离，通信子网中的其它每个路由器在表中占据一个表项，并作为该表项的索引。每隔一段时间，路由器会向所有邻居结点发送它到每个目的结点的距离表，同时它也接收每个邻居结点发来的距离表。这样以此类推，经过一段时间后便可将网络中各路由器所获得的距离矢量信息在各路由器上统一起来，这样各路由器只需要查看这个距离矢量表就可以为不同来源分组找到一条最佳的路由。
+		- 优点：非常简单清晰，且任何加入到网络中的新节点都能很快的与其它节点建立起联系获得补充信息。
+		- 缺点:    首先就是每次发送信息的时候，要发送整个全局路由表，太大了，因为每个路由器需要在矢量表中记录下整个网络的信息，导致需要较大存储、CPU、网络开销，对资源的要求越来越高。还有一个问题就是收敛时间太慢，也就是路由器共享路由信息并使各台路由器掌握的网络情况达到一致所需的时间比较久，收敛速度慢会导致有些路由器的表更新慢，从而造成路由环路的问题。
+	-  链路状态路由算法（Link State Routing ），基于Dijkstra算法，它是以图论作为理论基础，用图来表示网络拓扑结构，用图论中的最短路径算法来计算网络间的最佳路由。基于这类算法实现的协议有：OSPF 等。
+		- 这类算法的基本思路是：采用的是不停的拼接地图的方式。每一个路由器首先都会发现自己身边的邻居节点，然后将自己与邻居节点之间的链路状态包广播出去，发送到整个网络。这样，当某个路由器收到从网络中其它路由器广播来的路由信息包（链路状态包）之后，会将这个包中的信息与自己路由器上的信息进行拼装，最终形成一个全网的拓扑视图。
+		- 当路由器中形成了全网的拓扑视图后，它就可以通过最短路径算法来计算当前节点到其它路由器之间的最短路径了。当某台路由器的链路状态发生变化时，路由器采用洪泛法向所有路由器发送此信息，其它路由器使用收到的信息重新计算最佳路径，重新生成路由表（拓扑图）。
+		- 这里可以做一个类比，有一个路人甲人去问路，然后本地人A只知道A自己生活方圆5公里的地图，本地人B只知道B自己生活的方圆5公里的地图，但是路人甲要去的地方需要穿过A和B所在区域，那么就把A和B的2份地图拿来拼装在一起，然后去往目的地的完整路线就可以查出来了。
+
+```python
+#!/usr/bin/python
+
+# -*- coding: utf-8 -*-
+
+  
+  
+
+def Dijkstra(G, start):
+
+# 输入是从 0 开始，所以起始点减 1
+
+start = start - 1
+
+inf = float("inf")
+
+node_num = len(G)
+
+# visited 代表哪些顶点加入过
+
+visited = [0] * node_num
+
+# 初始顶点到其余顶点的距离
+
+dis = {node: G[start][node] for node in range(node_num)}
+
+# parents 代表最终求出最短路径后，每个顶点的上一个顶点是谁，初始化为 -1，代表无上一个顶点
+
+parents = {node: -1 for node in range(node_num)}
+
+# 起始点加入进 visited 数组
+
+visited[start] = 1
+
+# 最开始的上一个顶点为初始顶点
+
+last_point = start
+
+  
+
+for i in range(node_num - 1):
+
+# 求出 dis 中未加入 visited 数组的最短距离和顶点
+
+min_dis = inf
+
+for j in range(node_num):
+
+if visited[j] == 0 and dis[j] < min_dis:
+
+min_dis = dis[j]
+
+# 把该顶点做为下次遍历的上一个顶点
+
+last_point = j
+
+# 最短顶点假加入 visited 数组
+
+visited[last_point] = 1
+
+# 对首次循环做特殊处理，不然在首次循环时会没法求出该点的上一个顶点
+
+if i == 0:
+
+parents[last_point] = start + 1
+
+for k in range(node_num):
+
+if G[last_point][k] < inf and dis[k] > dis[last_point] + G[last_point][k]:
+
+# 如果有更短的路径，更新 dis 和 记录 parents
+
+dis[k] = dis[last_point] + G[last_point][k]
+
+parents[k] = last_point + 1
+
+  
+
+# 因为从 0 开始，最后把顶点都加 1
+
+return {key + 1: values for key, values in dis.items()}, {key + 1: values for key, values in parents.items()}
+
+  
+  
+
+if __name__ == "__main__":
+
+inf = float("inf")
+
+G = [[0, 1, 12, inf, inf, inf], [inf, 0, 9, 3, inf, inf], [inf, inf, 0, inf, 5, inf], [inf, inf, 4, 0, 13, 15], [inf, inf, inf, inf, 0, 4], [inf, inf, inf, inf, inf, 0]]
+
+dis, parents = Dijkstra(G, 1)
+
+print("dis: ", dis)
+
+print("parents: ", parents)
 ```
 
 
 
 
+#### 最小生成树 smallest tree
+![](readme.assets/Pasted%20image%2020230709161131.png)
+单播解法：流量负担。
+![](readme.assets/Pasted%20image%2020230709161228.png)
+洪水解法：会造成洪范攻击。
+![](readme.assets/Pasted%20image%2020230709161257.png)
+![](readme.assets/Pasted%20image%2020230709161346.png)
+生成树：图解最优解。
+![](readme.assets/Pasted%20image%2020230709161411.png)
+![](readme.assets/Pasted%20image%2020230709161455.png)
+![](readme.assets/Pasted%20image%2020230709161525.png)
+```python
+from pythonds.graphs import PriorityQueue, Graph, Vertex
 
+import sys
 
+  
+  
 
+def prim(G, start):
+
+pq = PriorityQueue()
+
+for v in G:
+
+v.setDistance(sys.maxsize)
+
+v.setPred(None)
+
+start.setDistance(0)
+
+pq.buildHeap([(v.getDistance(), v) for v in G])
+
+while not pq.isEmpty():
+
+currentVert = pq.delMin()
+
+for nextVert in currentVert.getConnections():
+
+newCost = currentVert.getWeight(nextVert)
+
+if nextVert in pq and newCost < nextVert.getDistance():
+
+nextVert.setPred(currentVert)
+
+nextVert.setDistance(newCost)
+
+pq.decreaseKey(nextVert, newCost)
+```
 
 ## 什么是算法分析？
 

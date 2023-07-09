@@ -8,14 +8,17 @@
 2.无向图==顶点之间没有权重
 """
 from pythonds.graphs.adjGraph import Graph
+from pythonds.basic.queue import Queue
+import os
 
 
 def buildGraph(wordFile):
     d = {}
     g = Graph()
-    wfile = open("wordFile", "r")
+    # 获取四字母单词集
+    wfile = open(wordFile, "r")
     for line in wfile:
-        word = line[:-1]
+        word = line.strip()
         for i in range(len(word)):
             bucket = word[:i] + "-" + word[i + 1 :]
             if bucket in d:
@@ -32,4 +35,38 @@ def buildGraph(wordFile):
     return g
 
 
-# 给定图g
+# BFS算法
+def bfs(g, start):
+    start.setDistance(0)
+    start.setPred(None)
+    # 设置队列
+    vertQueue = Queue()
+    vertQueue.enqueue(start)
+    while vertQueue.size() > 0:
+        # 取队首作为当前顶点
+        currentVert = vertQueue.dequeue()
+        for nbr in currentVert.getConnections():
+            # 遍历临街顶点
+            if nbr.getColor() == "white":
+                nbr.setColor("gray")
+                nbr.setDistance(currentVert.getDistance() + 1)
+                nbr.setPred(currentVert)
+                vertQueue.enqueue(nbr)
+            # 设置当前顶点为黑色
+            currentVert.setColor("black")
+
+
+def traverse(y):
+    x = y
+    while x.getPred():
+        print(x.getId())
+        x = x.getPred()
+    print(x.getId())
+
+
+if __name__ == "__main__":
+    xpth = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(xpth)
+    wordgraph = buildGraph("./word.txt")
+    bfs(wordgraph, wordgraph.getVertex("FOOL"))
+    traverse(wordgraph.getVertex("SAGE"))
